@@ -125,6 +125,36 @@ private fun setExampleData() {
         it[levelId] = 1
         it[userId] = 1
     }
+
+    SportEvents.insert {
+        it[title] = "Sport Event 2"
+        it[description] = "Sport Event 2"
+        it[minNumberOfPeople] = 2
+        it[maxNumberOfPeople] = 6
+        it[cost] = "200 zl"
+        it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[coachId] = 2
+        it[roomId] = 2
+        it[typeId] = 2
+        it[levelId] = 2
+        it[userId] = 2
+    }
+
+    SportEvents.insert {
+        it[title] = "Sport Event 3"
+        it[description] = "Sport Event 3"
+        it[minNumberOfPeople] = 4
+        it[maxNumberOfPeople] = 8
+        it[cost] = "300 zl"
+        it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[coachId] = 3
+        it[roomId] = 3
+        it[typeId] = 3
+        it[levelId] = 3
+        it[userId] = 3
+    }
 }
 
 suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
