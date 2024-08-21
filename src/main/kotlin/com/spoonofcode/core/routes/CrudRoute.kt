@@ -1,6 +1,6 @@
-package com.spoonofcode.routes
+package com.spoonofcode.core.routes
 
-import com.spoonofcode.repository.CrudRepository
+import com.spoonofcode.core.repository.CrudRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -16,7 +16,7 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
             try {
                 val newItem = call.receive(RQ::class)
                 val createdItem = repository.create(newItem)
-                call.respond(HttpStatusCode.Created, "Created Item: $createdItem")
+                call.respond(HttpStatusCode.Created, createdItem)
             } catch (e: Throwable) {
                 call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
             }

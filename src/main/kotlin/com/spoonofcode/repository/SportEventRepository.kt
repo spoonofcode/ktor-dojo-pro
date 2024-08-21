@@ -1,5 +1,6 @@
 package com.spoonofcode.repository
 
+import com.spoonofcode.core.repository.GenericCrudRepository
 import com.spoonofcode.data.model.*
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction

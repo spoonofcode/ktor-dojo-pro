@@ -1,5 +1,6 @@
 package com.spoonofcode.repository
 
+import com.spoonofcode.core.repository.GenericCrudRepository
 import com.spoonofcode.data.model.RoomRequest
 import com.spoonofcode.data.model.RoomResponse
 import com.spoonofcode.data.model.Rooms

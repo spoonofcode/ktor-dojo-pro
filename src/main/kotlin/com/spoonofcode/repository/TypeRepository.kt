@@ -1,5 +1,6 @@
 package com.spoonofcode.repository
 
+import com.spoonofcode.core.repository.GenericCrudRepository
 import com.spoonofcode.data.model.TypeRequest
 import com.spoonofcode.data.model.TypeResponse
 import com.spoonofcode.data.model.Types

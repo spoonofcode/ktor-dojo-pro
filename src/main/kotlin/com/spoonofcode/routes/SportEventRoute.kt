@@ -1,5 +1,6 @@
 package com.spoonofcode.routes
 
+import com.spoonofcode.core.routes.crudRoute
 import com.spoonofcode.repository.SportEventRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -14,22 +15,22 @@ fun Route.sportEvents(sportEventRepository: SportEventRepository = get()) {
         repository = sportEventRepository,
     )
     route(basePath) {
-        get("/user/{userId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
+        get("$basePath/{sportEventId}") {
+            val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
 
-            if (userId != null) {
+            if (sportEventId != null) {
                 try {
-                    val items = sportEventRepository.readByUserId(userId)
+                    val items = sportEventRepository.readByUserId(sportEventId)
                     if (items.isNotEmpty()) {
                         call.respond(items)
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "SportEvents for userId = $userId not found")
+                        call.respond(HttpStatusCode.NotFound, "SportEvents for sportEventId = $sportEventId not found")
                     }
                 } catch (e: IllegalArgumentException) {
-                    call.respond(HttpStatusCode.BadRequest, "Invalid userId format")
+                    call.respond(HttpStatusCode.BadRequest, "Invalid sportEventId format")
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'userId' parameter")
+                call.respond(HttpStatusCode.BadRequest, "Missing 'sportEventId' parameter")
             }
         }
     }
