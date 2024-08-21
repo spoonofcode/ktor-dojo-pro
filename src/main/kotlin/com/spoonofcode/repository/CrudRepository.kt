@@ -27,15 +27,19 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
             }
         }.value
 
-        val insertedRow = table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }.single()
-        toResponse(insertedRow)
+        if (leftJoinTables.isNotEmpty()) {
+            createQueryWithJoinLeftTables().select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+                .single().let { toResponse(it) }
+        } else {
+            table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+                .single().let { toResponse(it) }
+        }
     }
 
     override suspend fun read(id: Int): RS? = dbQuery {
         if (leftJoinTables.isNotEmpty()) {
             createQueryWithJoinLeftTables().select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
                 .singleOrNull()?.let { toResponse(it) }
-
         } else {
             table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
                 .singleOrNull()?.let { toResponse(it) }
@@ -57,7 +61,6 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     override suspend fun readAll(): List<RS> = dbQuery {
         if (leftJoinTables.isNotEmpty()) {
             createQueryWithJoinLeftTables().selectAll().map(toResponse)
-
         } else {
             table.selectAll().map(toResponse)
         }
