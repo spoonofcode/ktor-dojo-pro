@@ -5,14 +5,14 @@ import com.spoonofcode.data.model.CoachResponse
 import com.spoonofcode.data.model.Coaches
 
 class CoachRepository : GenericCrudRepository<Coaches, CoachRequest, CoachResponse>(
-    Coaches,
-    { request ->
+    table = Coaches,
+    toResultRow = { request ->
         mapOf(
             Coaches.firstName to request.firstName,
             Coaches.lastName to request.lastName,
         )
     },
-    { row ->
+    toResponse = { row ->
         CoachResponse(
             id = row[Coaches.id].value,
             firstName = row[Coaches.firstName],

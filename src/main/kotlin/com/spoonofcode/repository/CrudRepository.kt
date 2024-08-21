@@ -15,6 +15,7 @@ interface CrudRepository<RQ, RS> {
 
 abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     private val table: T,
+    private val leftJoinTables: List<IntIdTable> = emptyList(),
     private val toResultRow: (RQ) -> Map<Column<*>, Any?>,
     val toResponse: (ResultRow) -> RS
 ) : CrudRepository<RQ, RS> {
@@ -31,8 +32,14 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     }
 
     override suspend fun read(id: Int): RS? = dbQuery {
-        table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
-            .singleOrNull()?.let { toResponse(it) }
+        if (leftJoinTables.isNotEmpty()) {
+            createQueryWithJoinLeftTables().select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+                .singleOrNull()?.let { toResponse(it) }
+
+        } else {
+            table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+                .singleOrNull()?.let { toResponse(it) }
+        }
     }
 
     override suspend fun update(id: Int, request: RQ): Boolean = dbQuery {
@@ -48,6 +55,24 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     }
 
     override suspend fun readAll(): List<RS> = dbQuery {
-        table.selectAll().map(toResponse)
+        if (leftJoinTables.isNotEmpty()) {
+            createQueryWithJoinLeftTables().selectAll().map(toResponse)
+
+        } else {
+            table.selectAll().map(toResponse)
+        }
     }
+
+    // region Private methods
+    private fun createQueryWithJoinLeftTables(): Join {
+        // Start with the first left join to initialize the query as a Join type
+        var query = table.leftJoin(leftJoinTables.first())
+
+        // Loop through the rest of the tables (starting from the second element)
+        leftJoinTables.drop(1).forEach { joinTable ->
+            query = query.leftJoin(joinTable)
+        }
+        return query
+    }
+    // endregion
 }

@@ -1,9 +1,6 @@
 package com.spoonofcode.data.model
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
@@ -29,8 +26,8 @@ data class SportEventRequest(
 @Serializable
 data class SportEventResponse(
     val id: Int,
-    val creationDate: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-    val updateDate: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+    val creationDate: LocalDateTime,
+    val updateDate: LocalDateTime,
     val title: String,
     val description: String,
     val minNumberOfPeople: Int,
@@ -38,11 +35,11 @@ data class SportEventResponse(
     val cost: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val coachId: Int,
-    val roomId: Int,
-    val typeId: Int,
-    val levelId: Int,
-    val userId: Int,
+    val coach: CoachResponse,
+    val room: RoomResponse,
+    val type: TypeResponse,
+    val level: LevelResponse,
+    val user: UserResponse,
 )
 
 object SportEvents : IntIdTable() {

@@ -5,13 +5,13 @@ import com.spoonofcode.data.model.TypeResponse
 import com.spoonofcode.data.model.Types
 
 class TypeRepository : GenericCrudRepository<Types, TypeRequest, TypeResponse>(
-    Types,
-    { request ->
+    table = Types,
+    toResultRow = { request ->
         mapOf(
             Types.name to request.name,
         )
     },
-    { row ->
+    toResponse = { row ->
         TypeResponse(
             id = row[Types.id].value,
             name = row[Types.name],

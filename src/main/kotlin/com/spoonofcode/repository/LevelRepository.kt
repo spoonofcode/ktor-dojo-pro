@@ -5,13 +5,13 @@ import com.spoonofcode.data.model.LevelResponse
 import com.spoonofcode.data.model.Levels
 
 class LevelRepository : GenericCrudRepository<Levels, LevelRequest, LevelResponse>(
-    Levels,
-    { request ->
+    table = Levels,
+    toResultRow = { request ->
         mapOf(
             Levels.name to request.name,
         )
     },
-    { row ->
+    toResponse = { row ->
         LevelResponse(
             id = row[Levels.id].value,
             name = row[Levels.name],
