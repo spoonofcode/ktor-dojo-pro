@@ -41,4 +41,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### Local properties ###
+certificates/
 *keystore.jks
+local.properties
