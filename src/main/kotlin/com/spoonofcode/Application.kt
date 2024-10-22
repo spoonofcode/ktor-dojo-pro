@@ -11,7 +11,7 @@ fun Application.module() {
     configureSerialization()
     configureDI()
     configureDatabases()
-// TODO #29 Remove configureAuthentication
+// TODO #3 Remove configureAuthentication
 //    configureAuthentication()
     configureAuthenticationJWT()
     configureRouting()

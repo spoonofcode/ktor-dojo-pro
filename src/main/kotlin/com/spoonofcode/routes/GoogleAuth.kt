@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 fun Route.googleAuth() {
     route("/google-auth") {
         post("/") {
-            // TODO #29 Remove println
+            // TODO #3 Remove println
             println("BARTEK Execute Route.googleAuth")
             // Receive a body with idToken
             val body = call.receiveNullable<GoogleAuthTokenRequest>() ?: throw BadRequestException("Invalid body")
