@@ -40,7 +40,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
             type = TypeResponse(row[Types.id].value, row[Types.name]),
             level = LevelResponse(row[Levels.id].value, row[Levels.name]),
-            user = UserResponse(row[Users.id].value, row[Users.firstName], row[Users.lastName]),
+            user = UserResponse(row[Users.id].value, row[Users.firstName], row[Users.lastName], row[Users.email]),
         )
     }
 ) {

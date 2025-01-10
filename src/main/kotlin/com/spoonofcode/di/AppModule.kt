@@ -6,6 +6,7 @@ import com.spoonofcode.repository.RoomRepository
 import com.spoonofcode.repository.SportEventRepository
 import com.spoonofcode.repository.TypeRepository
 import com.spoonofcode.repository.UserRepository
+import com.spoonofcode.usecase.UserUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -16,4 +17,6 @@ val appModule = module {
     singleOf(::SportEventRepository)
     singleOf(::TypeRepository)
     singleOf(::UserRepository)
+
+    singleOf(::UserUseCase)
 }

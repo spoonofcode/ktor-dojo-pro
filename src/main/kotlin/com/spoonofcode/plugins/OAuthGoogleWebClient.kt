@@ -6,16 +6,19 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.request.*
-import kotlinx.html.*
-import kotlinx.serialization.*
+import kotlinx.html.a
+import kotlinx.html.body
+import kotlinx.html.p
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 val applicationHttpClient = HttpClient(CIO) {
     install(ContentNegotiation) {
@@ -23,7 +26,7 @@ val applicationHttpClient = HttpClient(CIO) {
     }
 }
 
-fun Application.configureAuthentication(httpClient: HttpClient = applicationHttpClient) {
+fun Application.configureOAuthGoogleWebClient(httpClient: HttpClient = applicationHttpClient) {
     install(Sessions) {
         cookie<UserSession>("user_session")
     }
@@ -87,14 +90,14 @@ fun Application.configureAuthentication(httpClient: HttpClient = applicationHttp
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
                 val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
-//                call.respondText("Hello, ${userInfo.name}! Welcome home!")
-                call.respondText("Hello, " + "\n" +
-                        "name = ${userInfo.name}" + "\n" +
-                        "givenName = ${userInfo.givenName}" + "\n" +
-                        "familyName = ${userInfo.familyName}" + "\n" +
-                        "locale = ${userInfo.locale}" + "\n" +
-                        "picture = ${userInfo.picture}" + "\n" +
-                        "id = ${userInfo.id}"
+                call.respondText(
+                    "Hello, " + "\n" +
+                            "name = ${userInfo.name}" + "\n" +
+                            "givenName = ${userInfo.givenName}" + "\n" +
+                            "familyName = ${userInfo.familyName}" + "\n" +
+                            "locale = ${userInfo.locale}" + "\n" +
+                            "picture = ${userInfo.picture}" + "\n" +
+                            "id = ${userInfo.id}"
                 )
             }
         }
