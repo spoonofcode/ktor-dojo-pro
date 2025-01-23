@@ -10,5 +10,5 @@ data class LoginRequest(
 
 @Serializable
 data class LoginResponse(
-    val idToken: String
+    val jwtToken: String
 )

@@ -20,7 +20,7 @@ class LoginUseCase(
             return LoginResult.InvalidCredentials
         }
 
-        val token = JwtConfig.generateToken(existingUser.id.toString())
-        return LoginResult.Success(LoginResponse(idToken = token))
+        val jwtToken = JwtConfig.generateToken(existingUser.id.toString())
+        return LoginResult.Success(LoginResponse(jwtToken = jwtToken))
     }
 }

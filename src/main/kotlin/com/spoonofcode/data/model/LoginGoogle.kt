@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginGoogleRequest(
-    val googleIdToken: String
+    val googleUserToken: String
 )
 
 @Serializable
 data class LoginGoogleResponse(
-    val idToken: String
+    val jwtToken: String
 )

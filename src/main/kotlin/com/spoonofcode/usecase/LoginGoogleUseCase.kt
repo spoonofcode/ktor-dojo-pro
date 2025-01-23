@@ -3,7 +3,7 @@ package com.spoonofcode.usecase
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.json.gson.GsonFactory
-import com.spoonofcode.data.model.LoginResponse
+import com.spoonofcode.data.model.LoginGoogleResponse
 import com.spoonofcode.data.model.UserRequest
 import com.spoonofcode.repository.UserRepository
 import com.spoonofcode.routes.JwtConfig
@@ -15,7 +15,7 @@ class LoginGoogleUseCase(
     private val userRepository: UserRepository,
 ) {
 
-    suspend fun loginUser(idToken: String): LoginGoogleResult {
+    suspend fun loginUser(googleUserToken: String): LoginGoogleResult {
         // TODO Consider injecting these two
         val transport = ApacheHttpTransport()
         val factory = GsonFactory.getDefaultInstance()
@@ -26,7 +26,7 @@ class LoginGoogleUseCase(
 
         // Verify received token
         val googleIdToken = withContext(Dispatchers.IO) {
-            verifier.verify(idToken)
+            verifier.verify(googleUserToken)
         }
 
         if (googleIdToken != null) {
@@ -37,7 +37,7 @@ class LoginGoogleUseCase(
             val existingUser = userRepository.readByEmail(email)
             if (existingUser != null) {
                 val token = JwtConfig.generateToken(existingUser.id.toString())
-                return LoginGoogleResult.Success(LoginResponse(idToken = token))
+                return LoginGoogleResult.Success(LoginGoogleResponse(jwtToken = token))
             } else {
                 val firstName = payload["given_name"]?.toString() ?: email.substringBefore("@")
                 val lastName = payload["family_name"]?.toString() ?: email.substringBefore("@")
@@ -52,8 +52,8 @@ class LoginGoogleUseCase(
                         providerId = googleIdToken.payload.userId
                     )
                 )
-                val token = JwtConfig.generateToken(newUser.id.toString())
-                return LoginGoogleResult.Success(LoginResponse(idToken = token))
+                val jwtToken = JwtConfig.generateToken(newUser.id.toString())
+                return LoginGoogleResult.Success(LoginGoogleResponse(jwtToken = jwtToken))
 
             }
         }

@@ -16,9 +16,9 @@ fun Route.loginGoogle(loginGoogleUseCase: LoginGoogleUseCase = get()) {
             // Receive a body with idToken
             val body = call.receiveNullable<LoginGoogleRequest>() ?: throw BadRequestException("Invalid body")
 
-            when (val result = loginGoogleUseCase.loginUser(idToken = body.googleIdToken)) {
+            when (val result = loginGoogleUseCase.loginUser(googleUserToken = body.googleUserToken)) {
                 is LoginGoogleResult.Success -> {
-                    call.respond(HttpStatusCode.OK, result.loginResponse)
+                    call.respond(HttpStatusCode.OK, result.loginGoogleResponse)
                 }
 
                 LoginGoogleResult.InvalidCredentials -> {
