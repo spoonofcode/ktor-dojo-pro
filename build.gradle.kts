@@ -42,6 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:2.3.3")
     implementation("io.ktor:ktor-server-auth-jwt:2.3.3")
     implementation("com.auth0:java-jwt:4.4.0") // For JWT token creation
+    implementation("org.mindrot:jbcrypt:0.4") // For JWT token creation
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
