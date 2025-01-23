@@ -18,7 +18,7 @@ fun Route.loginGoogle(loginGoogleUseCase: LoginGoogleUseCase = get()) {
 
             when (val result = loginGoogleUseCase.loginUser(idToken = body.googleIdToken)) {
                 is LoginGoogleResult.Success -> {
-                    call.respond(HttpStatusCode.OK, result.loginResponse.idToken)
+                    call.respond(HttpStatusCode.OK, result.loginResponse)
                 }
 
                 LoginGoogleResult.InvalidCredentials -> {

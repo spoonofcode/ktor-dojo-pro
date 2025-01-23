@@ -18,7 +18,7 @@ fun Route.login(loginUsecase: LoginUseCase = get()) {
 
             when (val result = loginUsecase.loginUser(email = body.email, password = body.password)) {
                 is LoginResult.Success -> {
-                    call.respond(HttpStatusCode.OK, result.loginResponse.idToken)
+                    call.respond(HttpStatusCode.OK, result.loginResponse)
                 }
 
                 LoginResult.InvalidCredentials, LoginResult.UserNotFound -> {

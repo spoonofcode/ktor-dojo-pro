@@ -5,9 +5,9 @@ import com.spoonofcode.repository.LevelRepository
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
-fun Route.levels(LevelRepository: LevelRepository = get()) {
+fun Route.levels(levelRepository: LevelRepository = get()) {
     crudRoute(
         basePath = "/levels",
-        repository = LevelRepository,
+        repository = levelRepository,
     )
 }

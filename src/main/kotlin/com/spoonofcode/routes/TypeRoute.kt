@@ -5,9 +5,9 @@ import com.spoonofcode.repository.TypeRepository
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
-fun Route.types(TypeRepository: TypeRepository = get()) {
+fun Route.types(typeRepository: TypeRepository = get()) {
     crudRoute(
         basePath = "/types",
-        repository = TypeRepository,
+        repository = typeRepository,
     )
 }
