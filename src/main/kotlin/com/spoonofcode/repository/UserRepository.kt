@@ -6,7 +6,6 @@ import com.spoonofcode.data.model.UserResponse
 import com.spoonofcode.data.model.Users
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mindrot.jbcrypt.BCrypt
 
 class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     table = Users,
@@ -37,16 +36,8 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
 
     fun readPassword(email: String): String {
         return transaction {
-            Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull()?: EMPTY_PASSWORD
+            Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD
         }
-    }
-
-    fun authenticateUser(email: String, plainPassword: String): Boolean {
-        val userRecord = transaction {
-            Users.select { Users.email eq email }.singleOrNull()
-        } ?: return false
-
-        return BCrypt.checkpw(plainPassword, userRecord[Users.password])
     }
 
     companion object {
