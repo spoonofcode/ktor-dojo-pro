@@ -26,7 +26,14 @@ class RegisterUseCase(
             userRequest.copy(password = hashedPassword)
         )
 
-        val jwtToken = JwtConfig.generateToken(newUser.id.toString())
-        return RegisterResult.Success(RegisterResponse(jwtToken = jwtToken))
+        val jwtAccessToken = JwtConfig.createAccessToken(newUser.id.toString())
+        val jwtRefreshToken = JwtConfig.createRefreshToken(newUser.id.toString())
+
+        return RegisterResult.Success(
+            RegisterResponse(
+                jwtAccessToken = jwtAccessToken,
+                jwtRefreshToken = jwtRefreshToken
+            )
+        )
     }
 }

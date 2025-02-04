@@ -31,4 +31,43 @@ fun Route.login(loginUsecase: LoginUseCase = get()) {
             }
         }
     }
+    route("/refresh") {
+        post("/") {
+            val refreshToken = call.request.headers["Authorization"]?.removePrefix("Bearer ")
+            if (refreshToken.isNullOrBlank()) {
+                call.respondText("No refresh token provided", status = HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            try {
+                val verifier = JwtConfig.getVerifier()
+                val decodedJWT = verifier.verify(refreshToken)
+
+                // Check if it's actually a refresh token
+                val isRefresh = decodedJWT.getClaim("refresh").asBoolean()
+                if (!isRefresh) {
+                    call.respondText("Not a refresh token", status = HttpStatusCode.BadRequest)
+                    return@post
+                }
+
+                val username = decodedJWT.getClaim("username").asString()
+
+                // Generate new tokens
+                val newAccessToken = JwtConfig.createAccessToken(username)
+                val newRefreshToken = JwtConfig.createRefreshToken(username)
+
+                // Optionally update stored refresh token in DB here...
+
+                call.respond(
+                    mapOf(
+                        "accessToken" to newAccessToken,
+                        "refreshToken" to newRefreshToken
+                    )
+                )
+            } catch (e: Exception) {
+                call.respondText("Invalid or expired refresh token", status = HttpStatusCode.Unauthorized)
+            }
+
+        }
+    }
 }

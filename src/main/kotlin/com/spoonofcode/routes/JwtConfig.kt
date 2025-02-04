@@ -40,26 +40,41 @@ package com.spoonofcode.routes
 //}
 
 import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import java.util.Date
 
 object JwtConfig {
     private const val secret = "your-secret-key"
-    private const val issuer = "com.example"
-    private const val validityInMs = 36_000_00 * 24 // 24 hours
+    private const val issuer = "ktor-dojo-pro"
+    const val audience = "ktor-dojo-pro-audience"
+
+    // Typically 15 minutes for access token (in seconds)
+    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
+
+    // Typically 7 days for refresh token (in seconds)
+    private const val refreshTokenValidityInMilliSeconds = 7 * 24 * 60 * 60 * 1000
 
     private val algorithm = Algorithm.HMAC256(secret)
 
-    val verifier = JWT.require(algorithm)
-        .withIssuer(issuer)
-        .build()
-
-    fun generateToken(userId: String): String = JWT.create()
+    fun createAccessToken(userId: String): String = JWT.create()
         .withSubject("Authentication")
         .withIssuer(issuer)
         .withClaim("userId", userId)
-        .withExpiresAt(getExpiration())
+        .withExpiresAt(Date(System.currentTimeMillis() + accessTokenValidityInMilliSeconds))
         .sign(algorithm)
 
-    private fun getExpiration() = Date(System.currentTimeMillis() + validityInMs)
+    fun createRefreshToken(userId: String): String = JWT.create()
+        .withSubject("Authentication")
+        .withIssuer(issuer)
+        .withClaim("userId", userId)
+        .withClaim("refresh", true)
+        .withExpiresAt(Date(System.currentTimeMillis() + refreshTokenValidityInMilliSeconds))
+        .sign(algorithm)
+
+    fun getVerifier(): JWTVerifier = JWT
+        .require(algorithm)
+        .withIssuer(issuer)
+        .withAudience(audience)
+        .build()
 }

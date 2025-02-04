@@ -9,5 +9,6 @@ data class LoginGoogleRequest(
 
 @Serializable
 data class LoginGoogleResponse(
-    val jwtToken: String
+    val jwtAccessToken: String,
+    val jwtRefreshToken: String,
 )
