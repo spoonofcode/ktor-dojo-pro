@@ -51,11 +51,10 @@ object JwtConfig {
     private const val audience = "ktor-dojo-pro-jwt-audience"
     private const val realm = "ktor-dojo-pro-jwt-realm"
 
-    // Typically 15 minutes for access token (in seconds)
-//    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
-    private const val accessTokenValidityInMilliSeconds = 36_000_00 * 24 // 24 hours
+    // 15 minutes for access token (in seconds)
+    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
 
-    // Typically 7 days for refresh token (in seconds)
+    // 7 days for refresh token (in seconds)
     private const val refreshTokenValidityInMilliSeconds = 7 * 24 * 60 * 60 * 1000
 
     private val algorithm = Algorithm.HMAC256(secret)
@@ -83,11 +82,7 @@ object JwtConfig {
         .withAudience(audience)
         .build()
 
-    /**
-     * Validates JWT credentials. Return `JWTPrincipal` if valid, otherwise `null`.
-     */
     fun validateCredential(credential: JWTCredential): JWTPrincipal? {
-        // Check your custom claims here if needed
         return if (credential.payload.audience.contains(audience) &&
             credential.payload.getClaim("userId").asString().isNullOrEmpty().not()
         ) {
