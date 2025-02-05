@@ -2,7 +2,7 @@ package com.spoonofcode.usecase
 
 import com.spoonofcode.data.model.LoginResponse
 import com.spoonofcode.repository.UserRepository
-import com.spoonofcode.routes.JwtConfig
+import com.spoonofcode.utils.JwtConfig
 import com.spoonofcode.routes.LoginResult
 import com.spoonofcode.utils.PasswordUtil
 

@@ -3,7 +3,7 @@ package com.spoonofcode.usecase
 import com.spoonofcode.data.model.RegisterResponse
 import com.spoonofcode.data.model.UserRequest
 import com.spoonofcode.repository.UserRepository
-import com.spoonofcode.routes.JwtConfig
+import com.spoonofcode.utils.JwtConfig
 import com.spoonofcode.routes.RegisterResult
 import com.spoonofcode.utils.PasswordUtil
 

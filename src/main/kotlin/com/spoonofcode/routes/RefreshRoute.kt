@@ -1,5 +1,6 @@
 package com.spoonofcode.routes
 
+import com.spoonofcode.utils.JwtConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

@@ -6,7 +6,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.spoonofcode.data.model.LoginGoogleResponse
 import com.spoonofcode.data.model.UserRequest
 import com.spoonofcode.repository.UserRepository
-import com.spoonofcode.routes.JwtConfig
+import com.spoonofcode.utils.JwtConfig
 import com.spoonofcode.routes.LoginGoogleResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
