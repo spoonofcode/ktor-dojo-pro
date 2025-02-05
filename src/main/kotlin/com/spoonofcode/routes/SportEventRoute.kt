@@ -18,10 +18,6 @@ fun Route.sportEvents(sportEventRepository: SportEventRepository = get()) {
     )
     route(basePath) {
         get("$basePath/{sportEventId}") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal?.payload?.getClaim("userId")?.asString()
-            call.respondText("Hello, $username! You are authorized.")
-
             val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
 
             if (sportEventId != null) {

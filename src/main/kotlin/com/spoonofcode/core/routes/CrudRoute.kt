@@ -3,8 +3,6 @@ package com.spoonofcode.core.routes
 import com.spoonofcode.core.repository.CrudRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.jwt.JWTPrincipal
-import io.ktor.server.auth.principal
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,10 +14,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
     route(basePath) {
         post("/") {
             try {
-                val principal = call.principal<JWTPrincipal>()
-                val username = principal?.payload?.getClaim("userId")?.asString()
-                call.respondText("Hello, $username! You are authorized.")
-
                 val newItem = call.receive(RQ::class)
                 val createdItem = repository.create(newItem)
                 call.respond(HttpStatusCode.Created, createdItem)
@@ -29,10 +23,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         get("/{id}") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal?.payload?.getClaim("userId")?.asString()
-            call.respondText("Hello, $username! You are authorized.")
-
             val itemId = call.parameters["id"]?.toIntOrNull()
 
             if (itemId != null) {
@@ -52,10 +42,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         put("/{id}") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal?.payload?.getClaim("userId")?.asString()
-            call.respondText("Hello, $username! You are authorized.")
-
             val itemId = call.parameters["id"]?.toIntOrNull()
 
             if (itemId != null) {
@@ -76,10 +62,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         delete("/{id}") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal?.payload?.getClaim("userId")?.asString()
-            call.respondText("Hello, $username! You are authorized.")
-
             val itemId = call.parameters["id"]?.toIntOrNull()
 
             if (itemId != null) {
@@ -99,10 +81,6 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         get("/") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal?.payload?.getClaim("userId")?.asString()
-            call.respondText("Hello, $username! You are authorized.")
-
             call.respond(repository.readAll())
         }
     }

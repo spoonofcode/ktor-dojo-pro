@@ -52,7 +52,8 @@ object JwtConfig {
     private const val realm = "ktor-dojo-pro-jwt-realm"
 
     // Typically 15 minutes for access token (in seconds)
-    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
+//    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
+    private const val accessTokenValidityInMilliSeconds = 36_000_00 * 24 // 24 hours
 
     // Typically 7 days for refresh token (in seconds)
     private const val refreshTokenValidityInMilliSeconds = 7 * 24 * 60 * 60 * 1000
@@ -96,8 +97,8 @@ object JwtConfig {
 
     fun configureKtorFeature(config: JWTAuthenticationProvider.Config) {
         with(config) {
+            verifier(getVerifier())
             realm = JwtConfig.realm
-            getVerifier()
             validate { credential -> validateCredential(credential) }
         }
     }
