@@ -42,12 +42,14 @@ package com.spoonofcode.routes
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import java.util.Date
+import io.ktor.server.auth.jwt.*
+import java.util.*
 
 object JwtConfig {
     private const val secret = "your-secret-key"
-    private const val issuer = "ktor-dojo-pro"
-    const val audience = "ktor-dojo-pro-audience"
+    private const val issuer = "ktor-dojo-pro-jwt-issuer"
+    private const val audience = "ktor-dojo-pro-jwt-audience"
+    private const val realm = "ktor-dojo-pro-jwt-realm"
 
     // Typically 15 minutes for access token (in seconds)
     private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
@@ -60,6 +62,7 @@ object JwtConfig {
     fun createAccessToken(userId: String): String = JWT.create()
         .withSubject("Authentication")
         .withIssuer(issuer)
+        .withAudience(audience)
         .withClaim("userId", userId)
         .withExpiresAt(Date(System.currentTimeMillis() + accessTokenValidityInMilliSeconds))
         .sign(algorithm)
@@ -67,6 +70,7 @@ object JwtConfig {
     fun createRefreshToken(userId: String): String = JWT.create()
         .withSubject("Authentication")
         .withIssuer(issuer)
+        .withAudience(audience)
         .withClaim("userId", userId)
         .withClaim("refresh", true)
         .withExpiresAt(Date(System.currentTimeMillis() + refreshTokenValidityInMilliSeconds))
@@ -77,4 +81,24 @@ object JwtConfig {
         .withIssuer(issuer)
         .withAudience(audience)
         .build()
+
+    /**
+     * Validates JWT credentials. Return `JWTPrincipal` if valid, otherwise `null`.
+     */
+    fun validateCredential(credential: JWTCredential): JWTPrincipal? {
+        // Check your custom claims here if needed
+        return if (credential.payload.audience.contains(audience) &&
+            credential.payload.getClaim("userId").asString().isNullOrEmpty().not()
+        ) {
+            JWTPrincipal(credential.payload)
+        } else null
+    }
+
+    fun configureKtorFeature(config: JWTAuthenticationProvider.Config) {
+        with(config) {
+            realm = JwtConfig.realm
+            getVerifier()
+            validate { credential -> validateCredential(credential) }
+        }
+    }
 }

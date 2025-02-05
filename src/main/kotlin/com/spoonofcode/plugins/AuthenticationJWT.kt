@@ -22,16 +22,7 @@ import io.ktor.server.auth.jwt.*
 fun Application.configureAuthenticationJWT() {
     install(Authentication) {
         jwt("auth-jwt") {
-            verifier(JwtConfig.getVerifier())
-            validate { credential ->
-                // Check if the token has the correct audience/issuer
-                val hasAudience = credential.payload.audience.contains(JwtConfig.audience)
-                if (hasAudience && credential.payload.getClaim("userId").asString() != null) {
-                    JWTPrincipal(credential.payload)
-                } else {
-                    null
-                }
-            }
+            JwtConfig.configureKtorFeature(this)
         }
     }
 }

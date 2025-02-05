@@ -4,6 +4,8 @@ import com.spoonofcode.core.routes.crudRoute
 import com.spoonofcode.repository.SportEventRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
@@ -16,6 +18,10 @@ fun Route.sportEvents(sportEventRepository: SportEventRepository = get()) {
     )
     route(basePath) {
         get("$basePath/{sportEventId}") {
+            val principal = call.principal<JWTPrincipal>()
+            val username = principal?.payload?.getClaim("userId")?.asString()
+            call.respondText("Hello, $username! You are authorized.")
+
             val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
 
             if (sportEventId != null) {
