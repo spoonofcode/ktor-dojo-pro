@@ -36,8 +36,15 @@ class LoginGoogleUseCase(
             // verify email
             val existingUser = userRepository.readByEmail(email)
             if (existingUser != null) {
-                val jwtAccessToken = JwtConfig.createAccessToken(existingUser.id.toString())
-                val jwtRefreshToken = JwtConfig.createRefreshToken(existingUser.id.toString())
+                val jwtAccessToken = JwtConfig.createAccessToken(
+                    userId = existingUser.id.toString(),
+                    email = existingUser.email,
+                )
+                val jwtRefreshToken = JwtConfig.createRefreshToken(
+                    userId = existingUser.id.toString(),
+                    email = existingUser.email,
+                )
+
                 return LoginGoogleResult.Success(
                     LoginGoogleResponse(
                         jwtAccessToken = jwtAccessToken,
@@ -58,8 +65,16 @@ class LoginGoogleUseCase(
                         providerId = googleIdToken.payload.userId
                     )
                 )
-                val jwtAccessToken = JwtConfig.createAccessToken(newUser.id.toString())
-                val jwtRefreshToken = JwtConfig.createRefreshToken(newUser.id.toString())
+
+                val jwtAccessToken = JwtConfig.createAccessToken(
+                    userId = newUser.id.toString(),
+                    email = newUser.email,
+                )
+                val jwtRefreshToken = JwtConfig.createRefreshToken(
+                    userId = newUser.id.toString(),
+                    email = newUser.email,
+                )
+
                 return LoginGoogleResult.Success(
                     LoginGoogleResponse(
                         jwtAccessToken = jwtAccessToken,

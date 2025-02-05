@@ -1,44 +1,5 @@
 package com.spoonofcode.routes
 
-//import com.auth0.jwt.JWT
-//import com.auth0.jwt.algorithms.Algorithm
-//import com.auth0.jwt.exceptions.JWTVerificationException
-//import com.auth0.jwt.interfaces.DecodedJWT
-//import java.util.Date
-//
-//object JwtConfig {
-//    // In production, store these in config/env variables, not hard-coded
-//    private const val secret = "your-secret-key" // Replace with your actual secret
-//    private const val issuer = "com.spoonofcode"
-//    private const val expirationTimeMs = 36_000_00 * 24 // 24 hours
-//
-//    private val algorithm = Algorithm.HMAC256(secret)
-//    private val expirationDate = Date(System.currentTimeMillis() + expirationTimeMs)
-//
-//    val verifier = JWT.require(algorithm)
-//        .withIssuer(issuer)
-//        .build()
-//
-//    fun generateToken(userId: String, email: String): String = JWT.create()
-//        .withIssuer(issuer)
-//        .withSubject(userId)
-//        .withClaim("email", email)
-//        .withExpiresAt(expirationDate)
-//        .sign(algorithm)
-//
-//    fun verifyToken(token: String): DecodedJWT? {
-//        return try {
-//            val verifier = JWT.require(algorithm)
-//                .withIssuer(issuer)
-//                .build()
-//            verifier.verify(token)
-//        } catch (ex: JWTVerificationException) {
-//            // Token is invalid or expired
-//            null
-//        }
-//    }
-//}
-
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
@@ -46,55 +7,75 @@ import io.ktor.server.auth.jwt.*
 import java.util.*
 
 object JwtConfig {
-    private const val secret = "your-secret-key"
-    private const val issuer = "ktor-dojo-pro-jwt-issuer"
-    private const val audience = "ktor-dojo-pro-jwt-audience"
-    private const val realm = "ktor-dojo-pro-jwt-realm"
+    const val CLAIM_EMAIL = "email"
+    const val CLAIM_REFRESH = "refresh"
 
-    // 15 minutes for access token (in seconds)
-    private const val accessTokenValidityInMilliSeconds = 15 * 60 * 1000
+    private const val SECRET = "your-secret-key"
+    private const val ISSUER = "ktor-dojo-pro-jwt-issuer"
+    private const val AUDIENCE = "ktor-dojo-pro-jwt-audience"
+    private const val REALM = "ktor-dojo-pro-jwt-realm"
 
-    // 7 days for refresh token (in seconds)
-    private const val refreshTokenValidityInMilliSeconds = 7 * 24 * 60 * 60 * 1000
+    // 15 minutes for access token (in milliseconds)
+    private const val ACCESS_TOKEN_VALIDITY_IN_MILLI_SECONDS = 15 * 60 * 1000L
 
-    private val algorithm = Algorithm.HMAC256(secret)
+    // 7 days for refresh token (in milliseconds)
+    private const val REFRESH_TOKEN_VALIDITY_IN_MILLI_SECONDS = 7 * 24 * 60 * 60 * 1000L
 
-    fun createAccessToken(userId: String): String = JWT.create()
-        .withSubject("Authentication")
-        .withIssuer(issuer)
-        .withAudience(audience)
-        .withClaim("userId", userId)
-        .withExpiresAt(Date(System.currentTimeMillis() + accessTokenValidityInMilliSeconds))
-        .sign(algorithm)
+    private val algorithm = Algorithm.HMAC256(SECRET)
 
-    fun createRefreshToken(userId: String): String = JWT.create()
-        .withSubject("Authentication")
-        .withIssuer(issuer)
-        .withAudience(audience)
-        .withClaim("userId", userId)
-        .withClaim("refresh", true)
-        .withExpiresAt(Date(System.currentTimeMillis() + refreshTokenValidityInMilliSeconds))
-        .sign(algorithm)
+    fun configureKtorFeature(config: JWTAuthenticationProvider.Config) {
+        with(config) {
+            verifier(getVerifier())
+            realm = REALM
+            validate { credential -> validateCredential(credential) }
+        }
+    }
+
+    fun createAccessToken(userId: String, email: String): String =
+        createToken(userId, email, ACCESS_TOKEN_VALIDITY_IN_MILLI_SECONDS)
+
+    fun createRefreshToken(userId: String, email: String): String =
+        createToken(userId, email, REFRESH_TOKEN_VALIDITY_IN_MILLI_SECONDS, isRefresh = true)
 
     fun getVerifier(): JWTVerifier = JWT
         .require(algorithm)
-        .withIssuer(issuer)
-        .withAudience(audience)
+        .withIssuer(ISSUER)
+        .withAudience(AUDIENCE)
         .build()
 
     fun validateCredential(credential: JWTCredential): JWTPrincipal? {
-        return if (credential.payload.audience.contains(audience) &&
-            credential.payload.getClaim("userId").asString().isNullOrEmpty().not()
+        return if (
+            with(credential.payload) {
+                audience.contains(AUDIENCE) &&
+                        issuer.contains(ISSUER) &&
+                        subject.isNullOrBlank().not() &&
+                        getClaim(CLAIM_EMAIL).asString().isNullOrEmpty().not()
+            }
+
+
         ) {
             JWTPrincipal(credential.payload)
         } else null
     }
 
-    fun configureKtorFeature(config: JWTAuthenticationProvider.Config) {
-        with(config) {
-            verifier(getVerifier())
-            realm = JwtConfig.realm
-            validate { credential -> validateCredential(credential) }
-        }
+    private fun createToken(
+        userId: String,
+        email: String,
+        validityInMs: Long,
+        isRefresh: Boolean = false
+    ): String {
+        val now = System.currentTimeMillis()
+        return JWT.create()
+            .withSubject(userId)
+            .withIssuer(ISSUER)
+            .withAudience(AUDIENCE)
+            .withClaim(CLAIM_EMAIL, email)
+            .apply {
+                if (isRefresh) {
+                    withClaim(CLAIM_REFRESH, true)
+                }
+            }
+            .withExpiresAt(Date(now + validityInMs))
+            .sign(algorithm)
     }
 }

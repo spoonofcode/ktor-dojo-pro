@@ -20,8 +20,14 @@ class LoginUseCase(
             return LoginResult.InvalidCredentials
         }
 
-        val jwtAccessToken = JwtConfig.createAccessToken(existingUser.id.toString())
-        val jwtRefreshToken = JwtConfig.createRefreshToken(existingUser.id.toString())
+        val jwtAccessToken = JwtConfig.createAccessToken(
+            userId = existingUser.id.toString(),
+            email = existingUser.email,
+        )
+        val jwtRefreshToken = JwtConfig.createRefreshToken(
+            userId = existingUser.id.toString(),
+            email = existingUser.email,
+        )
 
         return LoginResult.Success(
             LoginResponse(

@@ -1,13 +1,9 @@
 package com.spoonofcode.routes
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.call
-import io.ktor.server.response.respond
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.post
-import io.ktor.server.routing.route
-import kotlin.text.removePrefix
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.refresh() {
     route("/refresh") {
@@ -23,17 +19,18 @@ fun Route.refresh() {
                 val decodedJWT = verifier.verify(refreshToken)
 
                 // Check if it's actually a refresh token
-                val isRefresh = decodedJWT.getClaim("refresh").asBoolean()
+                val isRefresh = decodedJWT.getClaim(JwtConfig.CLAIM_REFRESH).asBoolean()
                 if (!isRefresh) {
                     call.respondText("Not a refresh token", status = HttpStatusCode.BadRequest)
                     return@post
                 }
 
-                val userId = decodedJWT.getClaim("userId").asString()
+                val userId = decodedJWT.subject
+                val email = decodedJWT.getClaim(JwtConfig.CLAIM_EMAIL).asString()
 
                 // Generate new tokens
-                val newJwtAccessToken = JwtConfig.createAccessToken(userId)
-                val newJwtRefreshToken = JwtConfig.createRefreshToken(userId)
+                val newJwtAccessToken = JwtConfig.createAccessToken(userId = userId, email = email)
+                val newJwtRefreshToken = JwtConfig.createRefreshToken(userId = userId, email = email)
 
                 call.respond(
                     mapOf(
