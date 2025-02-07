@@ -11,5 +11,7 @@ fun Application.module() {
     configureSerialization()
     configureDI()
     configureDatabases()
+//    configureOAuthGoogleWebClient()
+    configureAuthenticationJWT()
     configureRouting()
 }

@@ -48,16 +48,22 @@ private fun setExampleData() {
     Users.insert {
         it[firstName] = "Leo"
         it[lastName] = "Messi"
+        it[email] = "leo.messi@gmail.com"
+        it[password] = "\$2a\$10\$R1XjJMfB.NSCkXBG3lgl.O5CWZHsGASAExYeQo93p05set821adgC"
     }
 
     Users.insert {
         it[firstName] = "Christiano"
         it[lastName] = "Ronaldo"
+        it[email] = "christiano.ronaldo@gmail.com"
+        it[password] = "\$2a\$10\$6y8pa/hY/moeyHHyLbv9OuIYH7BpDdBuYbczD1PeCuhNfbNjn1zKG"
     }
 
     Users.insert {
         it[firstName] = "Frank"
         it[lastName] = "Lampard"
+        it[email] = "frank.lampard2@gmail.com"
+        it[password] = "\$2a\$10\$JyhRb4wNINnkITP9clEesurObqS9thJT32oVwEoCtUUV/AEMNxfEC"
     }
 
     Coaches.insert {
