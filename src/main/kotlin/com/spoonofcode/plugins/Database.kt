@@ -1,6 +1,12 @@
 package com.spoonofcode.plugins
 
-import com.spoonofcode.data.model.*
+import com.spoonofcode.core.model.Coaches
+import com.spoonofcode.core.model.Levels
+import com.spoonofcode.core.model.Rooms
+import com.spoonofcode.core.model.SportEvents
+import com.spoonofcode.core.model.Types
+import com.spoonofcode.core.model.Users
+import com.spoonofcode.core.model.updateSportEventTrigger
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.*

@@ -1,14 +1,14 @@
 package com.spoonofcode.di
 
-import com.spoonofcode.repository.CoachRepository
-import com.spoonofcode.repository.LevelRepository
-import com.spoonofcode.repository.RoomRepository
-import com.spoonofcode.repository.SportEventRepository
-import com.spoonofcode.repository.TypeRepository
-import com.spoonofcode.repository.UserRepository
-import com.spoonofcode.usecase.LoginUseCase
-import com.spoonofcode.usecase.LoginGoogleUseCase
-import com.spoonofcode.usecase.RegisterUseCase
+import com.spoonofcode.core.data.repository.CoachRepository
+import com.spoonofcode.core.data.repository.LevelRepository
+import com.spoonofcode.core.data.repository.RoomRepository
+import com.spoonofcode.core.data.repository.SportEventRepository
+import com.spoonofcode.core.data.repository.TypeRepository
+import com.spoonofcode.core.data.repository.UserRepository
+import com.spoonofcode.core.domain.LoginUseCase
+import com.spoonofcode.core.domain.LoginGoogleUseCase
+import com.spoonofcode.core.domain.RegisterUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import com.spoonofcode.utils.PasswordUtil

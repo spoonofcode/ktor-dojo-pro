@@ -1,5 +1,9 @@
 package com.spoonofcode.plugins
 
+import com.spoonofcode.feature.login.login.login
+import com.spoonofcode.feature.login.login.loginGoogle
+import com.spoonofcode.feature.login.refresh.refresh
+import com.spoonofcode.feature.login.register.register
 import com.spoonofcode.routes.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

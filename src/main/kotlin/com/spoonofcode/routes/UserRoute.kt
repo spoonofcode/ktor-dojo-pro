@@ -1,7 +1,7 @@
 package com.spoonofcode.routes
 
-import com.spoonofcode.core.routes.crudRoute
-import com.spoonofcode.repository.UserRepository
+import com.spoonofcode.core.base.routes.crudRoute
+import com.spoonofcode.core.data.repository.UserRepository
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
