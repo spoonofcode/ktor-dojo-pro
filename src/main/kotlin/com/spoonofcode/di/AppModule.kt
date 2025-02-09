@@ -11,7 +11,7 @@ import com.spoonofcode.core.domain.LoginGoogleUseCase
 import com.spoonofcode.core.domain.RegisterUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import com.spoonofcode.utils.PasswordUtil
+import com.spoonofcode.core.utils.PasswordUtil
 
 val appModule = module {
     singleOf(::CoachRepository)

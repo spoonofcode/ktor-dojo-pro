@@ -1,6 +1,6 @@
 package com.spoonofcode.feature.login.refresh
 
-import com.spoonofcode.utils.JwtConfig
+import com.spoonofcode.core.utils.JwtConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

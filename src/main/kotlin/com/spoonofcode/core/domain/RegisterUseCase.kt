@@ -3,9 +3,9 @@ package com.spoonofcode.core.domain
 import com.spoonofcode.core.model.RegisterResponse
 import com.spoonofcode.core.model.UserRequest
 import com.spoonofcode.core.data.repository.UserRepository
-import com.spoonofcode.utils.JwtConfig
+import com.spoonofcode.core.utils.JwtConfig
 import com.spoonofcode.feature.login.register.RegisterResult
-import com.spoonofcode.utils.PasswordUtil
+import com.spoonofcode.core.utils.PasswordUtil
 
 class RegisterUseCase(
     private val userRepository: UserRepository,

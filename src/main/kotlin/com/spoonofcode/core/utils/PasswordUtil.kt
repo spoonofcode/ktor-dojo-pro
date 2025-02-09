@@ -1,4 +1,4 @@
-package com.spoonofcode.utils
+package com.spoonofcode.core.utils
 
 import org.mindrot.jbcrypt.BCrypt
 
