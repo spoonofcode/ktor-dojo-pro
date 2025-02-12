@@ -12,12 +12,15 @@ class ProfileUseCase(
     suspend fun getProfile(userId: Int): ProfileResult {
         val user = userRepository.read(id = userId) ?: return ProfileResult.UserNotFound
         val numberOfCreatedEvents = sportEventRepository.countByCreatorUserId(userId)
+        val numberOfSportEventsInWhichTheUserParticipates =
+            userRepository.countSportEventsInWhichTheUserParticipates(userId)
 
         return ProfileResult.Success(
             Profile(
                 firstName = user.firstName,
                 lastName = user.lastName,
                 numberOfCreatedEvents = numberOfCreatedEvents,
+                numberOfEventsIParticipatedIn = numberOfSportEventsInWhichTheUserParticipates,
             )
         )
 

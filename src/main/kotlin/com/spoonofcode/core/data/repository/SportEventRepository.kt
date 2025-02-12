@@ -50,7 +50,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
         }
     }
 
-    suspend fun countByCreatorUserId(userId: Int): Long {
+     fun countByCreatorUserId(userId: Int): Long {
         return transaction {
             SportEvents.select { SportEvents.creatorUserId eq userId }.count()
         }

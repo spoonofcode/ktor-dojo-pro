@@ -1,9 +1,7 @@
 package com.spoonofcode.core.data.repository
 
 import com.spoonofcode.core.base.repository.GenericCrudRepository
-import com.spoonofcode.core.model.UserRequest
-import com.spoonofcode.core.model.UserResponse
-import com.spoonofcode.core.model.Users
+import com.spoonofcode.core.model.*
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -37,6 +35,45 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     fun readPassword(email: String): String {
         return transaction {
             Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD
+        }
+    }
+
+    fun countSportEventsInWhichTheUserParticipates(userId: Int): Long {
+        return transaction {
+            (SportEvents innerJoin SportEventUsers)
+                .select { SportEventUsers.userId eq userId }
+                .count()
+        }
+    }
+
+    fun readSportEventsInWhichTheUserParticipates(userId: Int): List<SportEventResponse> {
+        return transaction {
+            (SportEvents innerJoin SportEventUsers)
+                .select { SportEventUsers.userId eq userId }
+                .map { row ->
+                    SportEventResponse(
+                        id = row[SportEvents.id].value,
+                        creationDate = row[SportEvents.creationDate],
+                        updateDate = row[SportEvents.updateDate],
+                        title = row[SportEvents.title],
+                        description = row[SportEvents.description],
+                        minNumberOfPeople = row[SportEvents.minNumberOfPeople],
+                        maxNumberOfPeople = row[SportEvents.maxNumberOfPeople],
+                        cost = row[SportEvents.cost],
+                        startDateTime = row[SportEvents.startDateTime],
+                        endDateTime = row[SportEvents.endDateTime],
+                        coach = CoachResponse(row[Coaches.id].value, row[Coaches.firstName], row[Coaches.lastName]),
+                        room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
+                        type = TypeResponse(row[Types.id].value, row[Types.name]),
+                        level = LevelResponse(row[Levels.id].value, row[Levels.name]),
+                        creatorUser = UserResponse(
+                            row[Users.id].value,
+                            row[Users.firstName],
+                            row[Users.lastName],
+                            row[Users.email]
+                        ),
+                    )
+                }
         }
     }
 

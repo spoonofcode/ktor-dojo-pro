@@ -20,7 +20,15 @@ fun Application.configureDatabases() {
     val db = Database.connect(provideDataSource(jdbcUrl, driverClass))
     transaction(db) {
         dropTables()
-        SchemaUtils.create(Users, Coaches, Levels, Rooms, Types, SportEvents)
+        SchemaUtils.create(
+            Users,
+            Coaches,
+            Levels,
+            Rooms,
+            Types,
+            SportEvents,
+            SportEventUsers
+        )
         updateSportEventTrigger()
         setExampleData()
     }
@@ -40,7 +48,15 @@ private fun provideDataSource(url: String, driverClass: String): HikariDataSourc
 
 private fun dropTables() {
     transaction {
-        SchemaUtils.drop(Users, Coaches, Levels, Rooms, Types, SportEvents) // Add all the tables you want to drop here
+        SchemaUtils.drop(
+            Users,
+            Coaches,
+            Levels,
+            Rooms,
+            Types,
+            SportEvents,
+            SportEventUsers
+        ) // Add all the tables you want to drop here
     }
 }
 
@@ -160,6 +176,16 @@ private fun setExampleData() {
         it[typeId] = 3
         it[levelId] = 3
         it[creatorUserId] = 1
+    }
+
+    SportEventUsers.insert {
+        it[sportEventId] = 1
+        it[userId] = 1
+    }
+
+    SportEventUsers.insert {
+        it[sportEventId] = 2
+        it[userId] = 1
     }
 }
 
