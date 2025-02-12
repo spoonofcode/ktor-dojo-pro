@@ -2,6 +2,7 @@ package com.spoonofcode.core.data.repository
 
 import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
+import org.jetbrains.exposed.sql.leftJoin
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -46,11 +47,21 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         }
     }
 
-    fun readSportEventsInWhichTheUserParticipates(userId: Int): List<SportEventResponse> {
+    fun readSportEventsInWhichUserParticipates(userId: Int): List<SportEventResponse> {
         return transaction {
             (SportEvents innerJoin SportEventUsers)
+                .leftJoin(Coaches)
+                .leftJoin(Levels)
+                .leftJoin(Rooms)
+                .leftJoin(Types)
+                .leftJoin(
+                    otherTable = Users,
+                    onColumn = { SportEvents.creatorUserId },
+                    otherColumn = { Users.id }
+                )
                 .select { SportEventUsers.userId eq userId }
                 .map { row ->
+                    println("BARTEK row = $row")
                     SportEventResponse(
                         id = row[SportEvents.id].value,
                         creationDate = row[SportEvents.creationDate],

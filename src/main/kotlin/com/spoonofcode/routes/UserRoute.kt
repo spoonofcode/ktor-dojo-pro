@@ -15,11 +15,11 @@ fun Route.users(userRepository: UserRepository = get()) {
         repository = userRepository
     )
     route(basePath) {
-        get("$basePath/{userId}/events") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
+        get("/{id}/sportEvents") {
+            val userId = call.parameters["id"]?.toIntOrNull()
                 ?: return@get call.respond(HttpStatusCode.BadRequest, "Nieprawidłowy userId")
 
-            val sportEvents = userRepository.readSportEventsInWhichTheUserParticipates(userId = userId)
+            val sportEvents = userRepository.readSportEventsInWhichUserParticipates(userId = userId)
             call.respond(sportEvents)
         }
     }

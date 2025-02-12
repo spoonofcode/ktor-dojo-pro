@@ -1,4 +1,4 @@
-package com.spoonofcode.routes
+package com.spoonofcode.feature.sportevent
 
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.SportEventRepository
