@@ -1,10 +1,10 @@
 package com.spoonofcode.core.domain
 
-import com.spoonofcode.core.model.LoginResponse
 import com.spoonofcode.core.data.repository.UserRepository
+import com.spoonofcode.core.model.LoginResponse
 import com.spoonofcode.core.utils.JwtConfig
-import com.spoonofcode.feature.login.login.LoginResult
 import com.spoonofcode.core.utils.PasswordUtil
+import com.spoonofcode.feature.login.login.LoginResult
 
 class LoginUseCase(
     private val userRepository: UserRepository,
@@ -31,6 +31,7 @@ class LoginUseCase(
 
         return LoginResult.Success(
             LoginResponse(
+                userId = existingUser.id,
                 jwtAccessToken = jwtAccessToken,
                 jwtRefreshToken = jwtRefreshToken,
             )

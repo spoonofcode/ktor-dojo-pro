@@ -20,7 +20,7 @@ fun Route.sportEvents(sportEventRepository: SportEventRepository = get()) {
 
             if (sportEventId != null) {
                 try {
-                    val items = sportEventRepository.readByUserId(sportEventId)
+                    val items = sportEventRepository.readByCreatorUserId(sportEventId)
                     if (items.isNotEmpty()) {
                         call.respond(items)
                     } else {
