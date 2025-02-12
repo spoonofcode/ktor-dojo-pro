@@ -3,9 +3,9 @@ package com.spoonofcode.core.domain
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.json.gson.GsonFactory
+import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.model.LoginGoogleResponse
 import com.spoonofcode.core.model.UserRequest
-import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.utils.JwtConfig
 import com.spoonofcode.feature.login.login.LoginGoogleResult
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +47,7 @@ class LoginGoogleUseCase(
 
                 return LoginGoogleResult.Success(
                     LoginGoogleResponse(
+                        userId = existingUser.id,
                         jwtAccessToken = jwtAccessToken,
                         jwtRefreshToken = jwtRefreshToken,
                     )
@@ -54,7 +55,7 @@ class LoginGoogleUseCase(
             } else {
                 val firstName = payload["given_name"]?.toString() ?: email.substringBefore("@")
                 val lastName = payload["family_name"]?.toString() ?: email.substringBefore("@")
-                val pictureUrl = payload["picture"]?.toString()
+                payload["picture"]?.toString()
 
                 val newUser = userRepository.create(
                     UserRequest(
@@ -77,6 +78,7 @@ class LoginGoogleUseCase(
 
                 return LoginGoogleResult.Success(
                     LoginGoogleResponse(
+                        userId = newUser.id,
                         jwtAccessToken = jwtAccessToken,
                         jwtRefreshToken = jwtRefreshToken,
                     )

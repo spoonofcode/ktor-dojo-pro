@@ -21,7 +21,7 @@ data class SportEventRequest(
     val roomId: Int,
     val typeId: Int,
     val levelId: Int,
-    val userId: Int,
+    val creatorUserId: Int,
 )
 @Serializable
 data class SportEventResponse(
@@ -39,7 +39,8 @@ data class SportEventResponse(
     val room: RoomResponse,
     val type: TypeResponse,
     val level: LevelResponse,
-    val user: UserResponse,
+    val creatorUser: UserResponse,
+//    val participantUserIds: List<Int>
 )
 
 object SportEvents : IntIdTable() {
@@ -56,7 +57,7 @@ object SportEvents : IntIdTable() {
     val roomId = reference("room_id", Rooms)
     val typeId = reference("type_id", Types)
     val levelId = reference("level_id", Levels)
-    val userId = reference("user_id", Users)
+    val creatorUserId = reference("creation_user_id", Users)
 }
 
 // We need trigger to update updateDate value on each row update

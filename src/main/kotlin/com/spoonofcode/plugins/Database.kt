@@ -1,12 +1,6 @@
 package com.spoonofcode.plugins
 
-import com.spoonofcode.core.model.Coaches
-import com.spoonofcode.core.model.Levels
-import com.spoonofcode.core.model.Rooms
-import com.spoonofcode.core.model.SportEvents
-import com.spoonofcode.core.model.Types
-import com.spoonofcode.core.model.Users
-import com.spoonofcode.core.model.updateSportEventTrigger
+import com.spoonofcode.core.model.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.*
@@ -26,7 +20,15 @@ fun Application.configureDatabases() {
     val db = Database.connect(provideDataSource(jdbcUrl, driverClass))
     transaction(db) {
         dropTables()
-        SchemaUtils.create(Users, Coaches, Levels, Rooms, Types, SportEvents)
+        SchemaUtils.create(
+            Users,
+            Coaches,
+            Levels,
+            Rooms,
+            Types,
+            SportEvents,
+            SportEventUsers
+        )
         updateSportEventTrigger()
         setExampleData()
     }
@@ -46,7 +48,15 @@ private fun provideDataSource(url: String, driverClass: String): HikariDataSourc
 
 private fun dropTables() {
     transaction {
-        SchemaUtils.drop(Users, Coaches, Levels, Rooms, Types, SportEvents) // Add all the tables you want to drop here
+        SchemaUtils.drop(
+            Users,
+            Coaches,
+            Levels,
+            Rooms,
+            Types,
+            SportEvents,
+            SportEventUsers
+        ) // Add all the tables you want to drop here
     }
 }
 
@@ -135,7 +145,7 @@ private fun setExampleData() {
         it[roomId] = 1
         it[typeId] = 1
         it[levelId] = 1
-        it[userId] = 1
+        it[creatorUserId] = 1
     }
 
     SportEvents.insert {
@@ -150,7 +160,7 @@ private fun setExampleData() {
         it[roomId] = 2
         it[typeId] = 2
         it[levelId] = 2
-        it[userId] = 2
+        it[creatorUserId] = 1
     }
 
     SportEvents.insert {
@@ -165,7 +175,17 @@ private fun setExampleData() {
         it[roomId] = 3
         it[typeId] = 3
         it[levelId] = 3
-        it[userId] = 3
+        it[creatorUserId] = 1
+    }
+
+    SportEventUsers.insert {
+        it[sportEventId] = 1
+        it[userId] = 1
+    }
+
+    SportEventUsers.insert {
+        it[sportEventId] = 2
+        it[userId] = 1
     }
 }
 

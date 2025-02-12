@@ -1,19 +1,7 @@
 package com.spoonofcode.core.data.repository
 
-import com.spoonofcode.core.model.CoachResponse
-import com.spoonofcode.core.model.Coaches
-import com.spoonofcode.core.model.LevelResponse
-import com.spoonofcode.core.model.Levels
-import com.spoonofcode.core.model.RoomResponse
-import com.spoonofcode.core.model.Rooms
-import com.spoonofcode.core.model.SportEventRequest
-import com.spoonofcode.core.model.SportEventResponse
-import com.spoonofcode.core.model.SportEvents
-import com.spoonofcode.core.model.TypeResponse
-import com.spoonofcode.core.model.Types
-import com.spoonofcode.core.model.UserResponse
-import com.spoonofcode.core.model.Users
 import com.spoonofcode.core.base.repository.GenericCrudRepository
+import com.spoonofcode.core.model.*
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -33,7 +21,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             SportEvents.roomId to request.roomId,
             SportEvents.typeId to request.typeId,
             SportEvents.levelId to request.levelId,
-            SportEvents.userId to request.userId,
+            SportEvents.creatorUserId to request.creatorUserId,
         )
     },
     toResponse = { row ->
@@ -52,13 +40,19 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
             type = TypeResponse(row[Types.id].value, row[Types.name]),
             level = LevelResponse(row[Levels.id].value, row[Levels.name]),
-            user = UserResponse(row[Users.id].value, row[Users.firstName], row[Users.lastName], row[Users.email]),
+            creatorUser = UserResponse(row[Users.id].value, row[Users.firstName], row[Users.lastName], row[Users.email]),
         )
     }
 ) {
-    fun readByUserId(userId: Int): List<SportEventResponse> {
+    fun readByCreatorUserId(userId: Int): List<SportEventResponse> {
         return transaction {
-            SportEvents.select { SportEvents.userId eq userId }.map { toResponse(it) }
+            SportEvents.select { SportEvents.creatorUserId eq userId }.map { toResponse(it) }
+        }
+    }
+
+     fun countByCreatorUserId(userId: Int): Long {
+        return transaction {
+            SportEvents.select { SportEvents.creatorUserId eq userId }.count()
         }
     }
 }
