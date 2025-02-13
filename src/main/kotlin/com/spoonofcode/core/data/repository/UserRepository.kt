@@ -61,7 +61,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                 )
                 .select { SportEventUsers.userId eq userId }
                 .map { row ->
-                    println("BARTEK row = $row")
                     SportEventResponse(
                         id = row[SportEvents.id].value,
                         creationDate = row[SportEvents.creationDate],

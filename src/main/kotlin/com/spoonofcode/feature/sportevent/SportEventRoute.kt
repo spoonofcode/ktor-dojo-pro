@@ -15,16 +15,17 @@ fun Route.sportEvents(sportEventRepository: SportEventRepository = get()) {
         repository = sportEventRepository,
     )
     route(basePath) {
-        get("$basePath/{sportEventId}") {
-            val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
+        get("") {
+            // Check if the query parameter "creatorUserId" is present.
+            val creatorUserIdParam = call.request.queryParameters["creatorUserId"]?.toIntOrNull()
 
-            if (sportEventId != null) {
+            if (creatorUserIdParam != null) {
                 try {
-                    val items = sportEventRepository.readByCreatorUserId(sportEventId)
+                    val items = sportEventRepository.readByCreatorUserId(creatorUserId = creatorUserIdParam)
                     if (items.isNotEmpty()) {
                         call.respond(items)
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "SportEvents for sportEventId = $sportEventId not found")
+                        call.respond(HttpStatusCode.NotFound, "SportEvents for sportEventId = $creatorUserIdParam not found")
                     }
                 } catch (e: IllegalArgumentException) {
                     call.respond(HttpStatusCode.BadRequest, "Invalid sportEventId format")
