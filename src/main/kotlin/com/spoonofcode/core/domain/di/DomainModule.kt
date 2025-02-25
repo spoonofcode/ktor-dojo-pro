@@ -7,8 +7,9 @@ import org.koin.dsl.module
 val domainModule = module {
     singleOf(::LoginUseCase)
     singleOf(::LoginGoogleUseCase)
-    singleOf(::ProfileUseCase)
+    singleOf(::GetProfileUseCase)
     singleOf(::RegisterUseCase)
-    singleOf(::SportEventUseCase)
-    singleOf(::UserUseCase)
+    singleOf(::GetSportEventsUserParticipatedInUseCase)
+    singleOf(::GetSportEventsCreatedByUserUseCase)
+    singleOf(::AddUserToSportEventUseCase)
 }

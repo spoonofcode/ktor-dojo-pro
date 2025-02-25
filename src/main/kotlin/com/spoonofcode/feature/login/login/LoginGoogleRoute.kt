@@ -15,7 +15,7 @@ fun Route.loginGoogle(loginGoogleUseCase: LoginGoogleUseCase = get()) {
         post("/") {
             call.withValidBody<LoginGoogleRequest> { body ->
                 call.safeRespond {
-                    when (val result = loginGoogleUseCase.loginUser(googleUserToken = body.googleUserToken)) {
+                    when (val result = loginGoogleUseCase(googleUserToken = body.googleUserToken)) {
                         is LoginGoogleResult.Success -> {
                             call.respond(HttpStatusCode.OK, result.loginGoogleResponse)
                         }

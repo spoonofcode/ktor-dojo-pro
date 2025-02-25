@@ -15,7 +15,7 @@ fun Route.login(loginUsecase: LoginUseCase = get()) {
         post("/") {
             call.withValidBody<LoginRequest> { body ->
                 call.safeRespond {
-                    when (val result = loginUsecase.loginUser(email = body.email, password = body.password)) {
+                    when (val result = loginUsecase(email = body.email, password = body.password)) {
                         is LoginResult.Success -> {
                             call.respond(HttpStatusCode.OK, result.loginResponse)
                         }

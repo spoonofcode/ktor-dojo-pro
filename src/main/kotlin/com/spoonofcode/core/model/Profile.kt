@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class Profile(
     val firstName: String,
     val lastName: String,
-    val numberOfEventsIParticipatedIn: Long = 0L,
-    val numberOfCreatedEvents: Long,
+    val numberOfEventsUserParticipatedIn: Long = 0L,
+    val numberOfEventsCreatedByUser: Long,
 )

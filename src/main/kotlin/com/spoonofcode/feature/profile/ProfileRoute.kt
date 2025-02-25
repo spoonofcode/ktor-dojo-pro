@@ -2,14 +2,14 @@ package com.spoonofcode.feature.profile
 
 import com.spoonofcode.core.base.ext.safeRespond
 import com.spoonofcode.core.base.ext.withValidParameter
-import com.spoonofcode.core.domain.ProfileUseCase
+import com.spoonofcode.core.domain.GetProfileUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
-fun Route.profile(profileUseCase: ProfileUseCase = get()) {
+fun Route.profile(getProfileUseCase: GetProfileUseCase = get()) {
     route("/profile") {
         get("/{userId}") {
             call.withValidParameter(
@@ -17,7 +17,7 @@ fun Route.profile(profileUseCase: ProfileUseCase = get()) {
                 parser = String::toIntOrNull
             ) { userId ->
                 call.safeRespond {
-                    when (val result = profileUseCase.getProfile(userId = userId)) {
+                    when (val result = getProfileUseCase(userId = userId)) {
                         is ProfileResult.Success -> {
                             call.respond(HttpStatusCode.OK, result.profile)
                         }
