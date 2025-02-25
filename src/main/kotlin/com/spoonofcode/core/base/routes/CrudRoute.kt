@@ -1,5 +1,7 @@
 package com.spoonofcode.core.base.routes
 
+import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidId
 import com.spoonofcode.core.base.repository.CrudRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,39 +15,29 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
 ) {
     route(basePath) {
         post("/") {
-            try {
+            call.safeRespond {
                 val newItem = call.receive(RQ::class)
                 val createdItem = repository.create(newItem)
                 call.respond(HttpStatusCode.Created, createdItem)
-            } catch (e: Throwable) {
-                call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
             }
         }
 
         get("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidId { itemId ->
+                call.safeRespond {
                     val item = repository.read(itemId)
                     if (item != null) {
-                        call.respond(HttpStatusCode.OK, "Received item = $item.")
+                        call.respond(HttpStatusCode.OK, item)
                     } else {
                         call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
         put("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidId { itemId ->
+                call.safeRespond {
                     val updatedItem = call.receive(RQ::class)
                     val itemUpdated = repository.update(itemId, updatedItem)
                     if (itemUpdated) {
@@ -53,41 +45,28 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                     } else {
                         call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
         delete("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidId { itemId ->
+                call.safeRespond {
                     val itemDeleted = repository.delete(itemId)
                     if (itemDeleted) {
                         call.respond(HttpStatusCode.OK, "Item with id = $itemId deleted.")
                     } else {
                         call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
         get("/") {
-            try {
+            call.safeRespond {
                 val items = repository.readAll()
-                call.respond(HttpStatusCode.OK, "Received items = $items.")
-            } catch (e: Throwable) {
-                call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
+                call.respond(HttpStatusCode.OK, items)
             }
-
         }
     }
 }
