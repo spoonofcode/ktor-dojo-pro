@@ -24,45 +24,38 @@ fun Route.sportEvents(
     )
     route(basePath) {
         get("") {
-            val creatorUserIdParam = call.request.queryParameters["creatorUserId"]
+            val creatorUserId = call.request.queryParameters["creatorUserId"]?.toIntOrNull()
+            if (creatorUserId != null) {
+                when (val result = sportEventUseCase.getSportEventsCreatedByUser(creatorUserId = creatorUserId)) {
+                    is SportEventResult.Success -> {
+                        call.respond(HttpStatusCode.OK, result.sportEvents)
+                    }
 
-            if (creatorUserIdParam.isNullOrBlank()) {
-                throw BadRequestException("Missing or empty 'creatorUserId' parameter")
-            }
-
-            val creatorUserId = creatorUserIdParam.toIntOrNull()
-            if (creatorUserId == null) {
-                throw BadRequestException("'creatorUserId' must be an integer")
-            }
-
-            when (val result = sportEventUseCase.getSportEventsCreatedByUser(creatorUserId = creatorUserId)) {
-                is SportEventResult.Success -> {
-                    call.respond(HttpStatusCode.OK, result.sportEvents)
+                    is SportEventResult.UnknownError -> {
+                        call.respond(HttpStatusCode.InternalServerError, result.message)
+                    }
                 }
+            } else {
+                throw BadRequestException("Missing 'creatorUserId' parameter.")
 
-                is SportEventResult.UnknownError -> {
-                    call.respond(HttpStatusCode.InternalServerError, result.message)
-                }
             }
         }
 
         post("/{sportEventId}/users") {
             val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
-            if (sportEventId == null) {
-                call.respond(HttpStatusCode.BadRequest, "Invalid sportEventId ID.")
-                return@post
-            }
+            if (sportEventId != null) {
+                val addUserToSportEventRequest = call.receive<AddUserToSportEventRequest>()
+                val userId = addUserToSportEventRequest.userId
 
-            // Receive the request body with user ID
-            val addUserToSportEventRequest = call.receive<AddUserToSportEventRequest>()
-            val userId = addUserToSportEventRequest.userId
+                when (sportEventUseCase.addUserToSportEvent(userId = userId, sportEventId = sportEventId)) {
+                    SportEventUsersResult.Success -> {
+                        call.respond(HttpStatusCode.Created, "User with id = $userId added to event with id = $sportEventId.")
+                    }
 
-            when (sportEventUseCase.addUserToSportEvent(userId = userId, sportEventId = sportEventId)) {
-                SportEventUsersResult.Success -> {
-                    call.respond(HttpStatusCode.Created, "User ($userId) added to event ($sportEventId).")
+                    is SportEventUsersResult.UnknownError -> TODO()
                 }
-
-                is SportEventUsersResult.UnknownError -> TODO()
+            } else {
+                throw BadRequestException("Missing 'sportEventId' parameter.")
             }
         }
     }

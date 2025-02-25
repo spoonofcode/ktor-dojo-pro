@@ -18,7 +18,7 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                 val createdItem = repository.create(newItem)
                 call.respond(HttpStatusCode.Created, createdItem)
             } catch (e: Throwable) {
-                call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
+                call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
             }
         }
 
@@ -29,15 +29,15 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                 try {
                     val item = repository.read(itemId)
                     if (item != null) {
-                        call.respond(HttpStatusCode.OK, item)
+                        call.respond(HttpStatusCode.OK, "Received item = $item.")
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
                 } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
+                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
+                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
@@ -49,15 +49,15 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                     val updatedItem = call.receive(RQ::class)
                     val itemUpdated = repository.update(itemId, updatedItem)
                     if (itemUpdated) {
-                        call.respond(HttpStatusCode.OK, "Item with ID: $itemId has been updated")
+                        call.respond(HttpStatusCode.OK, "Item with id = $itemId has been updated.")
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
                 } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
+                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
+                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
@@ -68,27 +68,26 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
                 try {
                     val itemDeleted = repository.delete(itemId)
                     if (itemDeleted) {
-                        call.respond(HttpStatusCode.OK, "Item deleted")
+                        call.respond(HttpStatusCode.OK, "Item with id = $itemId deleted.")
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
                 } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
+                    call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
+                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter.")
             }
         }
 
         get("/") {
-            call.respond(repository.readAll())
-        }
-    }
-}
+            try {
+                val items = repository.readAll()
+                call.respond(HttpStatusCode.OK, "Received items = $items.")
+            } catch (e: Throwable) {
+                call.respond(HttpStatusCode.InternalServerError, e.message ?: e.printStackTrace())
+            }
 
-internal fun errorMessage(e: Throwable): Throwable {
-    return when (e) {
-        is IllegalArgumentException -> IllegalArgumentException("Invalid Id format")
-        else -> e
+        }
     }
 }
