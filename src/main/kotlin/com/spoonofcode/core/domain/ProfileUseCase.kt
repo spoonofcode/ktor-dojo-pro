@@ -23,6 +23,5 @@ class ProfileUseCase(
                 numberOfEventsIParticipatedIn = numberOfSportEventsInWhichTheUserParticipates,
             )
         )
-
     }
 }

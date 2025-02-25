@@ -2,8 +2,8 @@ package com.spoonofcode.core.data.repository
 
 import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
+import com.spoonofcode.plugins.dbQuery
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class SportEventRepository : GenericCrudRepository<SportEvents, SportEventRequest, SportEventResponse>(
     table = SportEvents,
@@ -40,18 +40,31 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
             type = TypeResponse(row[Types.id].value, row[Types.name]),
             level = LevelResponse(row[Levels.id].value, row[Levels.name]),
-            creatorUser = UserResponse(row[Users.id].value, row[Users.firstName], row[Users.lastName], row[Users.email]),
+            creatorUser = UserResponse(
+                row[Users.id].value,
+                row[Users.firstName],
+                row[Users.lastName],
+                row[Users.email]
+            ),
         )
     }
 ) {
-    fun readByCreatorUserId(userId: Int): List<SportEventResponse> {
-        return transaction {
-            SportEvents.select { SportEvents.creatorUserId eq userId }.map { toResponse(it) }
+    suspend fun readByCreatorUserId(creatorUserId: Int): List<SportEventResponse> {
+        return dbQuery {
+            SportEvents
+                .leftJoin(Coaches)
+                .leftJoin(Levels)
+                .leftJoin(Rooms)
+                .leftJoin(Types)
+                .leftJoin(Users)
+                .select { SportEvents.creatorUserId eq creatorUserId }.map {
+                    toResponse(it)
+                }
         }
     }
 
-     fun countByCreatorUserId(userId: Int): Long {
-        return transaction {
+    suspend fun countByCreatorUserId(userId: Int): Long {
+        return dbQuery {
             SportEvents.select { SportEvents.creatorUserId eq userId }.count()
         }
     }

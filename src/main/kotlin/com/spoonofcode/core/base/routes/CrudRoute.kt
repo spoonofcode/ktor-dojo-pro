@@ -1,5 +1,7 @@
 package com.spoonofcode.core.base.routes
 
+import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.repository.CrudRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,82 +15,67 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
 ) {
     route(basePath) {
         post("/") {
-            try {
+            call.safeRespond {
                 val newItem = call.receive(RQ::class)
                 val createdItem = repository.create(newItem)
                 call.respond(HttpStatusCode.Created, createdItem)
-            } catch (e: Throwable) {
-                call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
             }
         }
 
         get("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
+                call.safeRespond {
                     val item = repository.read(itemId)
                     if (item != null) {
                         call.respond(HttpStatusCode.OK, item)
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
             }
         }
 
         put("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
+                call.safeRespond {
                     val updatedItem = call.receive(RQ::class)
                     val itemUpdated = repository.update(itemId, updatedItem)
                     if (itemUpdated) {
-                        call.respond(HttpStatusCode.OK, "Item with ID: $itemId has been updated")
+                        call.respond(HttpStatusCode.OK, "Item with id = $itemId has been updated.")
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
             }
         }
 
         delete("/{id}") {
-            val itemId = call.parameters["id"]?.toIntOrNull()
-
-            if (itemId != null) {
-                try {
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
+                call.safeRespond {
                     val itemDeleted = repository.delete(itemId)
                     if (itemDeleted) {
-                        call.respond(HttpStatusCode.OK, "Item deleted")
+                        call.respond(HttpStatusCode.OK, "Item with id = $itemId deleted.")
                     } else {
-                        call.respond(HttpStatusCode.NotFound, "Item not found")
+                        call.respond(HttpStatusCode.NotFound, "Item with id = $itemId not found.")
                     }
-                } catch (e: Throwable) {
-                    call.respond(HttpStatusCode.BadRequest, errorMessage(e).message ?: "Bad Request")
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing 'id' parameter")
             }
         }
 
         get("/") {
-            call.respond(repository.readAll())
+            call.safeRespond {
+                val items = repository.readAll()
+                call.respond(HttpStatusCode.OK, items)
+            }
         }
-    }
-}
-
-internal fun errorMessage(e: Throwable): Throwable {
-    return when (e) {
-        is IllegalArgumentException -> IllegalArgumentException("Invalid Id format")
-        else -> e
     }
 }

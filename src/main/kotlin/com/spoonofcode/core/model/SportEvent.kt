@@ -40,7 +40,6 @@ data class SportEventResponse(
     val type: TypeResponse,
     val level: LevelResponse,
     val creatorUser: UserResponse,
-//    val participantUserIds: List<Int>
 )
 
 object SportEvents : IntIdTable() {

@@ -1,9 +1,10 @@
 package com.spoonofcode.feature.profile
 
+import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.domain.ProfileUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
@@ -11,19 +12,20 @@ import org.koin.ktor.ext.get
 fun Route.profile(profileUseCase: ProfileUseCase = get()) {
     route("/profile") {
         get("/{userId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull() ?: throw BadRequestException("Invalid body")
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
+                call.safeRespond {
+                    when (val result = profileUseCase.getProfile(userId = userId)) {
+                        is ProfileResult.Success -> {
+                            call.respond(HttpStatusCode.OK, result.profile)
+                        }
 
-            when (val result = profileUseCase.getProfile(userId = userId)) {
-                is ProfileResult.Success -> {
-                    call.respond(HttpStatusCode.OK, result.profile)
-                }
-
-                ProfileResult.UserNotFound -> {
-                    call.respond(HttpStatusCode.Unauthorized, "Invalid credentials.")
-                }
-
-                is ProfileResult.UnknownError -> {
-                    call.respond(HttpStatusCode.InternalServerError, result.message)
+                        ProfileResult.UserNotFound -> {
+                            call.respond(HttpStatusCode.NotFound, "User with id = $userId not found.")
+                        }
+                    }
                 }
             }
         }

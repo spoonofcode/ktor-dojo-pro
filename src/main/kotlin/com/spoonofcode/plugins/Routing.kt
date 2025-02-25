@@ -5,7 +5,12 @@ import com.spoonofcode.feature.login.login.loginGoogle
 import com.spoonofcode.feature.login.refresh.refresh
 import com.spoonofcode.feature.login.register.register
 import com.spoonofcode.feature.profile.profile
-import com.spoonofcode.routes.*
+import com.spoonofcode.feature.sportevent.sportEvents
+import com.spoonofcode.feature.user.users
+import com.spoonofcode.routes.coaches
+import com.spoonofcode.routes.levels
+import com.spoonofcode.routes.rooms
+import com.spoonofcode.routes.types
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
