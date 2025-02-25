@@ -9,6 +9,7 @@ val dataModule = module {
     singleOf(::LevelRepository)
     singleOf(::RoomRepository)
     singleOf(::SportEventRepository)
+    singleOf(::SportEventUsersRepository)
     singleOf(::TypeRepository)
     singleOf(::UserRepository)
 }

@@ -2,9 +2,9 @@ package com.spoonofcode.core.data.repository
 
 import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
+import com.spoonofcode.plugins.dbQuery
 import org.jetbrains.exposed.sql.leftJoin
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     table = Users,
@@ -27,28 +27,28 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         )
     }
 ) {
-    fun readByEmail(email: String): UserResponse? {
-        return transaction {
+    suspend fun readByEmail(email: String): UserResponse? {
+        return dbQuery {
             Users.select { Users.email eq email }.map { toResponse(it) }
         }.firstOrNull()
     }
 
-    fun readPassword(email: String): String {
-        return transaction {
+    suspend fun readPassword(email: String): String {
+        return dbQuery {
             Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD
         }
     }
 
-    fun countSportEventsInWhichTheUserParticipates(userId: Int): Long {
-        return transaction {
+    suspend fun countSportEventsInWhichTheUserParticipates(userId: Int): Long {
+        return dbQuery {
             (SportEvents innerJoin SportEventUsers)
                 .select { SportEventUsers.userId eq userId }
                 .count()
         }
     }
 
-    fun readSportEventsInWhichUserParticipates(userId: Int): List<SportEventResponse> {
-        return transaction {
+    suspend fun readSportEventsInWhichUserParticipates(userId: Int): List<SportEventResponse> {
+        return dbQuery {
             (SportEvents innerJoin SportEventUsers)
                 .leftJoin(Coaches)
                 .leftJoin(Levels)

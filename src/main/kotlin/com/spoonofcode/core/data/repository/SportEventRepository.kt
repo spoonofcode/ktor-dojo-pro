@@ -2,8 +2,8 @@ package com.spoonofcode.core.data.repository
 
 import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
+import com.spoonofcode.plugins.dbQuery
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class SportEventRepository : GenericCrudRepository<SportEvents, SportEventRequest, SportEventResponse>(
     table = SportEvents,
@@ -49,8 +49,8 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
         )
     }
 ) {
-    fun readByCreatorUserId(creatorUserId: Int): List<SportEventResponse> {
-        return transaction {
+    suspend fun readByCreatorUserId(creatorUserId: Int): List<SportEventResponse> {
+        return dbQuery {
             SportEvents
                 .leftJoin(Coaches)
                 .leftJoin(Levels)
@@ -63,8 +63,8 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
         }
     }
 
-    fun countByCreatorUserId(userId: Int): Long {
-        return transaction {
+    suspend fun countByCreatorUserId(userId: Int): Long {
+        return dbQuery {
             SportEvents.select { SportEvents.creatorUserId eq userId }.count()
         }
     }

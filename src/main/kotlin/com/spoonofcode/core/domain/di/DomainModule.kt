@@ -10,4 +10,6 @@ val domainModule = module {
     singleOf(::ProfileUseCase)
     singleOf(::RegisterUseCase)
     singleOf(::SportEventUseCase)
+    singleOf(::SportEventUsersUseCase)
+    singleOf(::UserUseCase)
 }
