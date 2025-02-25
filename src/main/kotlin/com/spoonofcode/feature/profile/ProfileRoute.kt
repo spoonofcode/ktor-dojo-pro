@@ -1,6 +1,7 @@
 package com.spoonofcode.feature.profile
 
 import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.domain.ProfileUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -11,8 +12,10 @@ import org.koin.ktor.ext.get
 fun Route.profile(profileUseCase: ProfileUseCase = get()) {
     route("/profile") {
         get("/{userId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-            if (userId != null) {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
                 call.safeRespond {
                     when (val result = profileUseCase.getProfile(userId = userId)) {
                         is ProfileResult.Success -> {
@@ -24,8 +27,6 @@ fun Route.profile(profileUseCase: ProfileUseCase = get()) {
                         }
                     }
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing or invalid 'userId' parameter.")
             }
         }
     }

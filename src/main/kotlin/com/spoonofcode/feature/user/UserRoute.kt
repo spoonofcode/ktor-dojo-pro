@@ -1,6 +1,7 @@
 package com.spoonofcode.feature.user
 
 import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.domain.UserUseCase
@@ -21,14 +22,14 @@ fun Route.users(
     )
     route(basePath) {
         get("/{userId}/sportEvents") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-            if (userId != null) {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
                 call.safeRespond {
                     val sportEvents = userUseCase.getSportEventsInWhichUserParticipates(userId = userId)
                     call.respond(HttpStatusCode.OK, sportEvents)
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing or invalid 'userId' parameter.")
             }
         }
     }

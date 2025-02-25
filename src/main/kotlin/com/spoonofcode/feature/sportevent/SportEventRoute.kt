@@ -2,6 +2,8 @@ package com.spoonofcode.feature.sportevent
 
 import com.spoonofcode.core.base.ext.safeRespond
 import com.spoonofcode.core.base.ext.withValidBody
+import com.spoonofcode.core.base.ext.withValidParameter
+import com.spoonofcode.core.base.ext.withValidQueryParameter
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.SportEventRepository
 import com.spoonofcode.core.domain.SportEventUseCase
@@ -23,21 +25,23 @@ fun Route.sportEvents(
     )
     route(basePath) {
         get("") {
-            val creatorUserId = call.request.queryParameters["creatorUserId"]?.toIntOrNull()
-            if (creatorUserId != null) {
+            call.withValidQueryParameter(
+                paramName = "creatorUserId",
+                parser = String::toIntOrNull
+            ) { creatorUserId ->
                 call.safeRespond {
                     val sportEventsByCreatorUserId =
                         sportEventUseCase.getSportEventsCreatedByUser(creatorUserId = creatorUserId)
                     call.respond(HttpStatusCode.OK, sportEventsByCreatorUserId)
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing or invalid 'creatorUserId' parameter.")
             }
         }
 
         post("/{sportEventId}/users") {
-            val sportEventId = call.parameters["sportEventId"]?.toIntOrNull()
-            if (sportEventId != null) {
+            call.withValidParameter(
+                paramName = "sportEventId",
+                parser = String::toIntOrNull
+            ) { sportEventId ->
                 call.withValidBody<AddUserToSportEventRequest> { body ->
                     call.safeRespond {
                         val userId = body.userId
@@ -48,8 +52,6 @@ fun Route.sportEvents(
                         )
                     }
                 }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Missing or invalid 'sportEventId' parameter.")
             }
         }
     }

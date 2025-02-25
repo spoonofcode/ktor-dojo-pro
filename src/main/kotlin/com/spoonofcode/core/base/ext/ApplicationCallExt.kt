@@ -15,13 +15,28 @@ suspend fun ApplicationCall.safeRespond(block: suspend () -> Unit) {
     }
 }
 
-suspend fun ApplicationCall.withValidId(block: suspend (Int) -> Unit) {
-    val itemId = parameters["id"]?.toIntOrNull()
-    if (itemId == null) {
-        respond(HttpStatusCode.BadRequest, "Missing or invalid 'id' parameter.")
-    } else {
-        block(itemId)
-    }
+suspend fun <T> ApplicationCall.withValidParameter(
+    paramName: String,
+    parser: (String) -> T?,
+    block: suspend (T) -> Unit,
+) {
+    val parsedValue = parameters[paramName]
+        ?.let { parser(it) }
+        ?: return respond(HttpStatusCode.BadRequest, "Missing or invalid '$paramName' parameter.")
+
+    block(parsedValue)
+}
+
+suspend fun <T> ApplicationCall.withValidQueryParameter(
+    paramName: String,
+    parser: (String) -> T?,
+    block: suspend (T) -> Unit,
+) {
+    val parsedValue = request.queryParameters[paramName]
+        ?.let { parser(it) }
+        ?: return respond(HttpStatusCode.BadRequest, "Missing or invalid '$paramName' parameter.")
+
+    block(parsedValue)
 }
 
 suspend inline fun <reified T : Any> ApplicationCall.withValidBody(block: suspend (T) -> Unit) {

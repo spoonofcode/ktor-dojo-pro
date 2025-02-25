@@ -1,7 +1,7 @@
 package com.spoonofcode.core.base.routes
 
 import com.spoonofcode.core.base.ext.safeRespond
-import com.spoonofcode.core.base.ext.withValidId
+import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.repository.CrudRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -23,7 +23,10 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         get("/{id}") {
-            call.withValidId { itemId ->
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
                 call.safeRespond {
                     val item = repository.read(itemId)
                     if (item != null) {
@@ -36,7 +39,10 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         put("/{id}") {
-            call.withValidId { itemId ->
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
                 call.safeRespond {
                     val updatedItem = call.receive(RQ::class)
                     val itemUpdated = repository.update(itemId, updatedItem)
@@ -50,7 +56,10 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
         }
 
         delete("/{id}") {
-            call.withValidId { itemId ->
+            call.withValidParameter(
+                paramName = "id",
+                parser = String::toIntOrNull
+            ) { itemId ->
                 call.safeRespond {
                     val itemDeleted = repository.delete(itemId)
                     if (itemDeleted) {
