@@ -3,7 +3,7 @@ package com.spoonofcode.feature.sportevent
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.SportEventRepository
 import com.spoonofcode.core.domain.SportEventUseCase
-import com.spoonofcode.core.model.AddUserRequest
+import com.spoonofcode.core.model.AddUserToSportEventRequest
 import com.spoonofcode.feature.sporteventusers.SportEventUsersResult
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -54,8 +54,8 @@ fun Route.sportEvents(
             }
 
             // Receive the request body with user ID
-            val addUserRequest = call.receive<AddUserRequest>()
-            val userId = addUserRequest.userId
+            val addUserToSportEventRequest = call.receive<AddUserToSportEventRequest>()
+            val userId = addUserToSportEventRequest.userId
 
             when (sportEventUseCase.addUserToSportEvent(userId = userId, sportEventId = sportEventId)) {
                 SportEventUsersResult.Success -> {
