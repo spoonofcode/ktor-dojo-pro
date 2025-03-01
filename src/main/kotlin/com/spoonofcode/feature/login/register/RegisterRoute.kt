@@ -16,7 +16,7 @@ fun Route.register(registerUseCase: RegisterUseCase = get()) {
         post("/") {
             call.withValidBody<RegisterRequest> { body ->
                 call.safeRespond {
-                    when (val result = registerUseCase.registerUser(
+                    when (val result = registerUseCase(
                         userRequest = UserRequest(
                             firstName = body.firstName,
                             lastName = body.lastName,

@@ -4,7 +4,7 @@ import com.spoonofcode.core.base.ext.safeRespond
 import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.UserRepository
-import com.spoonofcode.core.domain.UserUseCase
+import com.spoonofcode.core.domain.GetSportEventsUserParticipatedInUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -13,7 +13,7 @@ import org.koin.ktor.ext.get
 
 fun Route.users(
     userRepository: UserRepository = get(),
-    userUseCase: UserUseCase = get()
+    getSportEventsUserParticipatedInUseCase: GetSportEventsUserParticipatedInUseCase = get()
 ) {
     val basePath = "/users"
     crudRoute(
@@ -27,7 +27,7 @@ fun Route.users(
                 parser = String::toIntOrNull
             ) { userId ->
                 call.safeRespond {
-                    val sportEvents = userUseCase.getSportEventsInWhichUserParticipates(userId = userId)
+                    val sportEvents = getSportEventsUserParticipatedInUseCase(userId = userId)
                     call.respond(HttpStatusCode.OK, sportEvents)
                 }
             }

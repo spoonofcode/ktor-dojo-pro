@@ -15,7 +15,7 @@ class LoginGoogleUseCase(
     private val userRepository: UserRepository,
 ) {
 
-    suspend fun loginUser(googleUserToken: String): LoginGoogleResult {
+    suspend operator fun invoke(googleUserToken: String): LoginGoogleResult {
         // TODO Consider injecting these two
         val transport = ApacheHttpTransport()
         val factory = GsonFactory.getDefaultInstance()

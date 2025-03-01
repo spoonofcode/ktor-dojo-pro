@@ -10,7 +10,7 @@ class LoginUseCase(
     private val userRepository: UserRepository,
     private val passwordUtil: PasswordUtil,
 ) {
-    suspend fun loginUser(email: String, password: String): LoginResult {
+    suspend operator fun invoke(email: String, password: String): LoginResult {
         // verify email
         val existingUser = userRepository.readByEmail(email) ?: return LoginResult.UserNotFound
 

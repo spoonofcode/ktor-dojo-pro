@@ -11,7 +11,7 @@ class RegisterUseCase(
     private val userRepository: UserRepository,
     private val passwordUtil: PasswordUtil,
 ) {
-    suspend fun registerUser(
+    suspend operator fun invoke(
         userRequest: UserRequest
     ): RegisterResult {
         val existingUser = userRepository.readByEmail(userRequest.email)

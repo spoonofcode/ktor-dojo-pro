@@ -5,22 +5,20 @@ import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.model.Profile
 import com.spoonofcode.feature.profile.ProfileResult
 
-class ProfileUseCase(
+class GetProfileUseCase(
     private val userRepository: UserRepository,
     private val sportEventRepository: SportEventRepository,
 ) {
-    suspend fun getProfile(userId: Int): ProfileResult {
+    suspend operator fun invoke(userId: Int): ProfileResult {
         val user = userRepository.read(id = userId) ?: return ProfileResult.UserNotFound
-        val numberOfCreatedEvents = sportEventRepository.countByCreatorUserId(userId)
-        val numberOfSportEventsInWhichTheUserParticipates =
-            userRepository.countSportEventsInWhichTheUserParticipates(userId)
-
+        val numberOfEventsCreatedByUser = sportEventRepository.countByCreatorUserId(userId)
+        val numberOfEventsUserParticipatedIn = userRepository.countSportEventsInWhichTheUserParticipates(userId)
         return ProfileResult.Success(
             Profile(
                 firstName = user.firstName,
                 lastName = user.lastName,
-                numberOfCreatedEvents = numberOfCreatedEvents,
-                numberOfEventsIParticipatedIn = numberOfSportEventsInWhichTheUserParticipates,
+                numberOfEventsCreatedByUser = numberOfEventsCreatedByUser,
+                numberOfEventsUserParticipatedIn = numberOfEventsUserParticipatedIn,
             )
         )
     }
