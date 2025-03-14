@@ -8,7 +8,7 @@ val koin_version: String by project
 val google_auth_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.0.10"
+    kotlin("jvm") version "2.1.10"
     id("io.ktor.plugin") version "2.3.12"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
 }
