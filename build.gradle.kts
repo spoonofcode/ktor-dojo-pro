@@ -1,16 +1,7 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-val exposed_version: String by project
-val mysql_version: String by project
-val hikaricp_version: String by project
-val koin_version: String by project
-val google_auth_version: String by project
-
 plugins {
-    kotlin("jvm") version "2.1.10"
-    id("io.ktor.plugin") version "2.3.12"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor.plugin)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.spoonofcode"
@@ -28,33 +19,42 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auth:$ktor_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
-    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
+    // Ktor client
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
 
-    implementation("io.ktor:ktor-server-auth:2.3.3")
-    implementation("io.ktor:ktor-server-auth-jwt:2.3.3")
-    implementation("com.auth0:java-jwt:4.4.0") // For JWT token creation
-    implementation("org.mindrot:jbcrypt:0.4") // For JWT token creation
+    // Ktor server
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.html.builder)
+    implementation(libs.ktor.server.host.common)
 
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
-    implementation("mysql:mysql-connector-java:$mysql_version")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
-    implementation("com.zaxxer:HikariCP:$hikaricp_version")
-    implementation("com.google.api-client:google-api-client:$google_auth_version")
+    // Additional JWT/auth libs
+    implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.auth0.java.jwt)
+    implementation(libs.jbcrypt)
 
-    testImplementation("io.ktor:ktor-server-test-host-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    // Logging
+    implementation(libs.logback.classic)
+
+    // Exposed + MySQL
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.kotlin.datetime)
+    implementation(libs.exposed.java.time)
+    implementation(libs.mysql.connector.java)
+
+    // Koin + Hikari + Google
+    implementation(libs.koin.ktor)
+    implementation(libs.hikaricp)
+    implementation(libs.google.api.client)
+
+    // Testing
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.kotlin.test.junit)
 }
