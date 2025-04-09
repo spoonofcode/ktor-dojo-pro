@@ -3,6 +3,7 @@ package com.spoonofcode.core.domain
 import com.spoonofcode.core.data.repository.SportEventRepository
 import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.model.Profile
+import com.spoonofcode.core.model.UserResponse
 import com.spoonofcode.feature.profile.ProfileResult
 
 class GetProfileUseCase(
@@ -15,11 +16,16 @@ class GetProfileUseCase(
         val numberOfEventsUserParticipatedIn = userRepository.countSportEventsInWhichTheUserParticipates(userId)
         return ProfileResult.Success(
             Profile(
-                firstName = user.firstName,
-                lastName = user.lastName,
+                name = getFullName(user = user),
+                role = user.role,
                 numberOfEventsCreatedByUser = numberOfEventsCreatedByUser,
                 numberOfEventsUserParticipatedIn = numberOfEventsUserParticipatedIn,
             )
         )
+    }
+
+    private fun getFullName(user: UserResponse): String = buildString {
+        append("${user.firstName} ${user.lastName}")
+        user.nickName?.let { append(" ($it)") }
     }
 }

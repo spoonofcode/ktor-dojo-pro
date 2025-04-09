@@ -23,7 +23,9 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
             id = row[Users.id].value,
             firstName = row[Users.firstName],
             lastName = row[Users.lastName],
+            nickName = row[Users.nickName],
             email = row[Users.email],
+            role = row[Users.role],
         )
     }
 ) {
@@ -77,10 +79,12 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                         type = TypeResponse(row[Types.id].value, row[Types.name]),
                         level = LevelResponse(row[Levels.id].value, row[Levels.name]),
                         creatorUser = UserResponse(
-                            row[Users.id].value,
-                            row[Users.firstName],
-                            row[Users.lastName],
-                            row[Users.email]
+                            id = row[Users.id].value,
+                            firstName = row[Users.firstName],
+                            lastName = row[Users.lastName],
+                            nickName = row[Users.nickName],
+                            email = row[Users.email],
+                            role = row[Users.role],
                         ),
                     )
                 }
