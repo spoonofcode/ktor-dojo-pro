@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.select
 
 class SportEventRepository : GenericCrudRepository<SportEvents, SportEventRequest, SportEventResponse>(
     table = SportEvents,
-    leftJoinTables = listOf(Coaches, Levels, Rooms, Types, Users),
+    leftJoinTables = listOf(Clubs, Coaches, Levels, Rooms, Types, Users),
     toResultRow = { request ->
         mapOf(
             SportEvents.title to request.title,
@@ -17,6 +17,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             SportEvents.cost to request.cost,
             SportEvents.startDateTime to request.startDateTime,
             SportEvents.endDateTime to request.endDateTime,
+            SportEvents.clubId to request.clubId,
             SportEvents.coachId to request.coachId,
             SportEvents.roomId to request.roomId,
             SportEvents.typeId to request.typeId,
@@ -36,6 +37,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             cost = row[SportEvents.cost],
             startDateTime = row[SportEvents.startDateTime],
             endDateTime = row[SportEvents.endDateTime],
+            club = ClubResponse(row[Clubs.id].value, row[Clubs.name], row[Clubs.location]),
             coach = CoachResponse(row[Coaches.id].value, row[Coaches.firstName], row[Coaches.lastName]),
             room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
             type = TypeResponse(row[Types.id].value, row[Types.name]),
@@ -54,6 +56,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
     suspend fun readByCreatorUserId(creatorUserId: Int): List<SportEventResponse> {
         return dbQuery {
             SportEvents
+                .leftJoin(Clubs)
                 .leftJoin(Coaches)
                 .leftJoin(Levels)
                 .leftJoin(Rooms)

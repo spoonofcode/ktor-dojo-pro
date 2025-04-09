@@ -52,6 +52,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     suspend fun readSportEventsInWhichUserParticipates(userId: Int): List<SportEventResponse> {
         return dbQuery {
             (SportEvents innerJoin SportEventUsers)
+                .leftJoin(Clubs)
                 .leftJoin(Coaches)
                 .leftJoin(Levels)
                 .leftJoin(Rooms)
@@ -74,6 +75,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                         cost = row[SportEvents.cost],
                         startDateTime = row[SportEvents.startDateTime],
                         endDateTime = row[SportEvents.endDateTime],
+                        club = ClubResponse(row[Clubs.id].value, row[Clubs.name], row[Clubs.location]),
                         coach = CoachResponse(row[Coaches.id].value, row[Coaches.firstName], row[Coaches.lastName]),
                         room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
                         type = TypeResponse(row[Types.id].value, row[Types.name]),

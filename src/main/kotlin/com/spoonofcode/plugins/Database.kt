@@ -223,10 +223,6 @@ private fun setExampleData() {
     }
 
     Types.insert {
-        it[name] = "stand-up battle"
-    }
-
-    Types.insert {
         it[name] = "Boks"
     }
 
@@ -274,6 +270,7 @@ private fun setExampleData() {
         it[cost] = "100 zl"
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[clubId] = 1
         it[coachId] = 1
         it[roomId] = 1
         it[typeId] = 1
@@ -289,6 +286,7 @@ private fun setExampleData() {
         it[cost] = "200 zl"
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[clubId] = 2
         it[coachId] = 2
         it[roomId] = 2
         it[typeId] = 2
@@ -304,6 +302,7 @@ private fun setExampleData() {
         it[cost] = "300 zl"
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        it[clubId] = 3
         it[coachId] = 3
         it[roomId] = 3
         it[typeId] = 3
