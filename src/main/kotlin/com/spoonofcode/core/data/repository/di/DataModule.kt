@@ -11,5 +11,6 @@ val dataModule = module {
     singleOf(::SportEventRepository)
     singleOf(::SportEventUsersRepository)
     singleOf(::TypeRepository)
+    singleOf(::RoleRepository)
     singleOf(::UserRepository)
 }

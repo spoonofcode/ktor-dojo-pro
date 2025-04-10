@@ -34,7 +34,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         }.firstOrNull()
     }
 
-    suspend fun readAllUserByRole(roleId: Int): List<UserResponse> {
+    suspend fun readAllUserByRoleId(roleId: Int): List<UserResponse> {
         return dbQuery {
             (Users innerJoin UserRoles)
             .select { UserRoles.roleId eq roleId }.map(toResponse)
