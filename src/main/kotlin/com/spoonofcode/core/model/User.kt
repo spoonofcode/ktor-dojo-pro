@@ -12,7 +12,6 @@ data class UserRequest(
     val password: String? = null,
     val provider: String? = null,
     val providerId: String? = null,
-    val role: Role = Role.USER,
 )
 
 @Serializable
@@ -22,7 +21,6 @@ data class UserResponse(
     val lastName: String,
     val nickName: String? = null,
     val email: String,
-    val role: Role,
 )
 
 object Users : IntIdTable() {
@@ -33,5 +31,4 @@ object Users : IntIdTable() {
     val password = varchar("password", 255).nullable()
     val provider = varchar("provider", 50).nullable()
     val providerId = varchar("provider_id", 255).nullable()
-    val role = enumerationByName("role", 10, Role::class)
 }

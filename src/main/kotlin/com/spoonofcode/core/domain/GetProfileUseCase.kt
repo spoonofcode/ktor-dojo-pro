@@ -17,7 +17,6 @@ class GetProfileUseCase(
         return ProfileResult.Success(
             Profile(
                 name = getFullName(user = user),
-                role = user.role,
                 numberOfEventsCreatedByUser = numberOfEventsCreatedByUser,
                 numberOfEventsUserParticipatedIn = numberOfEventsUserParticipatedIn,
             )

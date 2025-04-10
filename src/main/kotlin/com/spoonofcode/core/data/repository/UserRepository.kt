@@ -25,7 +25,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
             lastName = row[Users.lastName],
             nickName = row[Users.nickName],
             email = row[Users.email],
-            role = row[Users.role],
         )
     }
 ) {
@@ -35,9 +34,10 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         }.firstOrNull()
     }
 
-    suspend fun readAllUserByRole(role: Role): List<UserResponse> {
+    suspend fun readAllUserByRole(roleId: Int): List<UserResponse> {
         return dbQuery {
-            Users.select { Users.role eq role }.map(toResponse)
+            (Users innerJoin UserRoles)
+            .select { UserRoles.roleId eq roleId }.map(toResponse)
         }
     }
 
@@ -90,7 +90,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                             lastName = row[Users.lastName],
                             nickName = row[Users.nickName],
                             email = row[Users.email],
-                            role = row[Users.role],
                         ),
                     )
                 }

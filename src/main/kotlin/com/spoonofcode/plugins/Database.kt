@@ -22,6 +22,8 @@ fun Application.configureDatabases() {
         dropTables()
         SchemaUtils.create(
             Users,
+            Roles,
+            UserRoles,
             Clubs,
             Levels,
             Rooms,
@@ -50,6 +52,8 @@ private fun dropTables() {
     transaction {
         SchemaUtils.drop(
             Users,
+            Roles,
+            UserRoles,
             Clubs,
             Levels,
             Rooms,
@@ -61,13 +65,22 @@ private fun dropTables() {
 }
 
 private fun setExampleData() {
+    Roles.insert { it[name] = "ADMIN" }
+    Roles.insert { it[name] = "CLUB_OWNER" }
+    Roles.insert { it[name] = "COACH" }
+    Roles.insert { it[name] = "USER" }
+
     Users.insert {
         it[firstName] = "Bartosz"
         it[lastName] = "Luczak"
         it[nickName] = "Lycha"
         it[email] = "bartosz.luczak@gmail.com"
         it[password] = "\$2a\$10\$JvONt8faWClBF4Y5D.9uQO8x2DJDDiVw8VcRwBWmB94tP67WQKNtK"
-        it[role] = Role.ADMIN
+    }
+
+    UserRoles.insert {
+        it[userId] = 1
+        it[roleId] = 1
     }
 
     Users.insert {
@@ -75,7 +88,11 @@ private fun setExampleData() {
         it[lastName] = "Staroszczyk"
         it[email] = "michal.staroszczyk@gmail.com"
         it[password] = "\$2a\$10\$zCx5qtCaWxzP/L6hB3pH6u0wMhvev3WAqokQQ8UcmnYDOI6bNEjS."
-        it[role] = Role.CLUB_OWNER
+    }
+
+    UserRoles.insert {
+        it[userId] = 2
+        it[roleId] = 2
     }
 
     Users.insert {
@@ -84,7 +101,11 @@ private fun setExampleData() {
         it[nickName] = "Tatanka"
         it[email] = "artur.mackow@gmail.com"
         it[password] = "\$2a\$10\$0AgsnrhIbbq3e0jWeW.g0.kniIrjjCXWAs81y69hymh.04YJTKmC."
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 3
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -93,7 +114,11 @@ private fun setExampleData() {
         it[nickName] = "Pajak"
         it[email] = "dawid.platek@gmail.com"
         it[password] = "\$2a\$10\$txXhfXroVdyly1WtQFOw5OfHilnZzKp5ZTptQJcErIk5GErnAhh7e"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 4
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -101,7 +126,11 @@ private fun setExampleData() {
         it[lastName] = "Bajor"
         it[email] = "jacek.bajor@gmail.com"
         it[password] = "\$2a\$10\$Biyt911mKRL06oNv9M97QeEifQA76lvcWJpyppPT.puI5tQWW97tW"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 5
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -109,7 +138,11 @@ private fun setExampleData() {
         it[lastName] = "laszczyk"
         it[email] = "kamil.laszczyk@gmail.com"
         it[password] = "\$2a\$10\$gU0tHDLR4H6bLE9Ra0wfEOJh05.XxoC03c0XRBKK2G4gMU9/Q7tFm"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 6
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -118,7 +151,11 @@ private fun setExampleData() {
         it[nickName] = "Piter"
         it[email] = "piotr.jakubowski@gmail.com"
         it[password] = "\$2a\$10\$E0lMFgY72H0KxebWd2RqsuJxKwDM7bNT78TUXl3/gIyxRBPHmAYQG"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 7
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -127,7 +164,11 @@ private fun setExampleData() {
         it[nickName] = "Wika"
         it[email] = "wiktoria.zakrzewska@gmail.com"
         it[password] = "\$2a\$10\$BfQpbNqb2B5lrtrhQmvjCux0H6wcp2uGnbhk3x7zVg.cpz3ojER0W"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 8
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -136,7 +177,11 @@ private fun setExampleData() {
         it[nickName] = "Perun"
         it[email] = "lukasz.skrzypnik@gmail.com"
         it[password] = "\$2a\$10\$A.bhOFmqlC2iTFCg2Eo2VegQflwP03jq884jevIpHuF2V2zWnp6VG"
-        it[role] = Role.COACH
+    }
+
+    UserRoles.insert {
+        it[userId] = 9
+        it[roleId] = 3
     }
 
     Users.insert {
@@ -145,7 +190,11 @@ private fun setExampleData() {
         it[nickName] = "User1"
         it[email] = "jan.kowalski@gmail.com"
         it[password] = "\$2a\$10\$RSIgzWxRf75Gbkg4Kul3EOtWREQ4SiDin6N0.D48gx8NEJk63K/hq"
-        it[role] = Role.USER
+    }
+
+    UserRoles.insert {
+        it[userId] = 10
+        it[roleId] = 4
     }
 
     Users.insert {
@@ -154,7 +203,11 @@ private fun setExampleData() {
         it[nickName] = "User2"
         it[email] = "adam.nowak@gmail.com"
         it[password] = "\$2a\$10\$mjR7cnFSIob2/8KuxEzyXucqQ5/X330Ie4uVHjTfbP1e8tRcinpF2"
-        it[role] = Role.USER
+    }
+
+    UserRoles.insert {
+        it[userId] = 11
+        it[roleId] = 4
     }
 
     Users.insert {
@@ -163,7 +216,11 @@ private fun setExampleData() {
         it[nickName] = "User3"
         it[email] = "katarzyna.solska@gmail.com"
         it[password] = "\$2a\$10\$TbCkwakRuJ9/MsEk0O85Cez5qSXwn2CdANVbcvmu2zIsDnWjiNz3q"
-        it[role] = Role.USER
+    }
+
+    UserRoles.insert {
+        it[userId] = 12
+        it[roleId] = 4
     }
 
     Clubs.insert {
@@ -287,7 +344,7 @@ private fun setExampleData() {
         it[roomId] = 3
         it[typeId] = 3
         it[levelId] = 3
-        it[creatorUserId] = 1
+        it[creatorUserId] = 3
     }
 
     SportEventUsers.insert {

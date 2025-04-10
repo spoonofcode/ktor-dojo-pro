@@ -46,7 +46,6 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
                 lastName = row[Users.lastName],
                 nickName = row[Users.nickName],
                 email = row[Users.email],
-                role = row[Users.role],
             ),
         )
     }
@@ -60,16 +59,6 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
                 .leftJoin(Types)
                 .leftJoin(Users)
                 .select { SportEvents.creatorUserId eq creatorUserId }.map {
-                    toResponse(it)
-                }
-        }
-    }
-
-    suspend fun readAllUserWithCoachRole(): List<SportEventResponse> {
-        return dbQuery {
-            SportEvents
-                .innerJoin(Users)
-                .select { Users.role eq Role.COACH }.map {
                     toResponse(it)
                 }
         }

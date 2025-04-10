@@ -7,7 +7,6 @@ import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.domain.GetAllUsersByRoleUseCase
 import com.spoonofcode.core.domain.GetSportEventsUserParticipatedInUseCase
-import com.spoonofcode.core.model.Role
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -26,11 +25,11 @@ fun Route.users(
     )
     route(basePath) {
         get("") {
-            call.withValidQueryParameter<Role>(
-                paramName = "role",
-            ) { role ->
+            call.withValidQueryParameter<Int>(
+                paramName = "roleId",
+            ) { roleId ->
                 call.safeRespond {
-                    val sportEventsByCreatorUserId = getAllUsersByRoleUseCase(role = role)
+                    val sportEventsByCreatorUserId = getAllUsersByRoleUseCase(roleId = roleId)
                     call.respond(HttpStatusCode.OK, sportEventsByCreatorUserId)
                 }
             }
