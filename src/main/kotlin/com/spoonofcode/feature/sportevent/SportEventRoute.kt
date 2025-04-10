@@ -27,9 +27,8 @@ fun Route.sportEvents(
     )
     route(basePath) {
         get("") {
-            call.withValidQueryParameter(
+            call.withValidQueryParameter<Int>(
                 paramName = "creatorUserId",
-                parser = String::toIntOrNull
             ) { creatorUserId ->
                 call.safeRespond {
                     val sportEventsByCreatorUserId = getSportEventsCreatedByUserUseCase(creatorUserId = creatorUserId)

@@ -35,6 +35,12 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         }.firstOrNull()
     }
 
+    suspend fun readAllUserByRole(role: Role): List<UserResponse> {
+        return dbQuery {
+            Users.select { Users.role eq role }.map(toResponse)
+        }
+    }
+
     suspend fun readPassword(email: String): String {
         return dbQuery {
             Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD

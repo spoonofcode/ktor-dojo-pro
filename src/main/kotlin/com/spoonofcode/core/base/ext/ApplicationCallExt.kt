@@ -27,13 +27,14 @@ suspend fun <T> ApplicationCall.withValidParameter(
     block(parsedValue)
 }
 
-suspend fun <T> ApplicationCall.withValidQueryParameter(
+suspend inline fun <reified T> ApplicationCall.withValidQueryParameter(
     paramName: String,
-    parser: (String) -> T?,
-    block: suspend (T) -> Unit,
+    crossinline block: suspend (T) -> Unit
 ) {
-    val parsedValue = request.queryParameters[paramName]
-        ?.let { parser(it) }
+    val rawValue = request.queryParameters[paramName]
+        ?: return respond(HttpStatusCode.BadRequest, "Missing '$paramName' parameter.")
+
+    val parsedValue = tryConvert<T>(rawValue)
         ?: return respond(HttpStatusCode.BadRequest, "Missing or invalid '$paramName' parameter.")
 
     block(parsedValue)
@@ -48,4 +49,24 @@ suspend inline fun <reified T : Any> ApplicationCall.withValidBody(block: suspen
     }
 }
 
+inline fun <reified T> tryConvert(value: String): T? {
+    return when {
+        // Handle enums via reflection:
+        T::class.java.isEnum -> {
+            val enumConstants = T::class.java.enumConstants as Array<Enum<*>>
+            val match = enumConstants.firstOrNull { it.name.equals(value, ignoreCase = true) }
+            match as? T
+        }
+
+        // Built-in conversions:
+        T::class == String::class  -> value as T
+        T::class == Int::class     -> value.toIntOrNull() as T?
+        T::class == Long::class    -> value.toLongOrNull() as T?
+        T::class == Boolean::class -> value.toBooleanStrictOrNull() as T?
+        T::class == Float::class   -> value.toFloatOrNull() as T?
+        T::class == Double::class  -> value.toDoubleOrNull() as T?
+
+        else -> null  // or throw an exception, depending on your needs
+    }
+}
 

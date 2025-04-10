@@ -65,6 +65,16 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
         }
     }
 
+    suspend fun readAllUserWithCoachRole(): List<SportEventResponse> {
+        return dbQuery {
+            SportEvents
+                .innerJoin(Users)
+                .select { Users.role eq Role.COACH }.map {
+                    toResponse(it)
+                }
+        }
+    }
+
     suspend fun countByCreatorUserId(userId: Int): Long {
         return dbQuery {
             SportEvents.select { SportEvents.creatorUserId eq userId }.count()
