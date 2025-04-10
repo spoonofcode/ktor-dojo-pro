@@ -6,7 +6,6 @@ import org.koin.dsl.module
 
 val dataModule = module {
     singleOf(::ClubRepository)
-    singleOf(::CoachRepository)
     singleOf(::LevelRepository)
     singleOf(::RoomRepository)
     singleOf(::SportEventRepository)

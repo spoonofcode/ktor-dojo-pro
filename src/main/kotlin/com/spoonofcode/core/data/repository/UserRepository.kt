@@ -53,7 +53,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         return dbQuery {
             (SportEvents innerJoin SportEventUsers)
                 .leftJoin(Clubs)
-                .leftJoin(Coaches)
                 .leftJoin(Levels)
                 .leftJoin(Rooms)
                 .leftJoin(Types)
@@ -76,7 +75,6 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                         startDateTime = row[SportEvents.startDateTime],
                         endDateTime = row[SportEvents.endDateTime],
                         club = ClubResponse(row[Clubs.id].value, row[Clubs.name], row[Clubs.location]),
-                        coach = CoachResponse(row[Coaches.id].value, row[Coaches.firstName], row[Coaches.lastName]),
                         room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
                         type = TypeResponse(row[Types.id].value, row[Types.name]),
                         level = LevelResponse(row[Levels.id].value, row[Levels.name]),

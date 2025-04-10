@@ -23,7 +23,6 @@ fun Application.configureDatabases() {
         SchemaUtils.create(
             Users,
             Clubs,
-            Coaches,
             Levels,
             Rooms,
             Types,
@@ -52,7 +51,6 @@ private fun dropTables() {
         SchemaUtils.drop(
             Users,
             Clubs,
-            Coaches,
             Levels,
             Rooms,
             Types,
@@ -183,21 +181,6 @@ private fun setExampleData() {
         it[location] = "Wysoka"
     }
 
-    Coaches.insert {
-        it[firstName] = "Jose"
-        it[lastName] = "Murinho"
-    }
-
-    Coaches.insert {
-        it[firstName] = "Pep"
-        it[lastName] = "Guardiola"
-    }
-
-    Coaches.insert {
-        it[firstName] = "Michal"
-        it[lastName] = "Probierz"
-    }
-
     Levels.insert {
         it[name] = "Basic"
     }
@@ -271,7 +254,6 @@ private fun setExampleData() {
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[clubId] = 1
-        it[coachId] = 1
         it[roomId] = 1
         it[typeId] = 1
         it[levelId] = 1
@@ -287,7 +269,6 @@ private fun setExampleData() {
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[clubId] = 2
-        it[coachId] = 2
         it[roomId] = 2
         it[typeId] = 2
         it[levelId] = 2
@@ -303,7 +284,6 @@ private fun setExampleData() {
         it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         it[clubId] = 3
-        it[coachId] = 3
         it[roomId] = 3
         it[typeId] = 3
         it[levelId] = 3
