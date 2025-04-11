@@ -14,4 +14,5 @@ val domainModule = module {
     singleOf(::GetSportEventsUserParticipatedInUseCase)
     singleOf(::GetSportEventsCreatedByUserUseCase)
     singleOf(::AddUserToSportEventUseCase)
+    singleOf(::AddRoleToUserUseCase)
 }

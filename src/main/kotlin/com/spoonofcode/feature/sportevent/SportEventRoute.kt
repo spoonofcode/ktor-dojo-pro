@@ -48,7 +48,7 @@ fun Route.sportEvents(
                         addUserToSportEventUseCase(userId, sportEventId)
                         call.respond(
                             HttpStatusCode.Created,
-                            "User with id = $userId added to event with id = $sportEventId."
+                            "User with id = $userId added to sport event with id = $sportEventId."
                         )
                     }
                 }

@@ -1,12 +1,15 @@
 package com.spoonofcode.feature.user
 
 import com.spoonofcode.core.base.ext.safeRespond
+import com.spoonofcode.core.base.ext.withValidBody
 import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.ext.withValidQueryParameter
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.UserRepository
+import com.spoonofcode.core.domain.AddRoleToUserUseCase
 import com.spoonofcode.core.domain.GetAllUsersByRoleIdUseCase
 import com.spoonofcode.core.domain.GetSportEventsUserParticipatedInUseCase
+import com.spoonofcode.core.model.AddRoleToUserRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -17,6 +20,7 @@ fun Route.users(
     userRepository: UserRepository = get(),
     getAllUsersByRoleIdUseCase: GetAllUsersByRoleIdUseCase = get(),
     getSportEventsUserParticipatedInUseCase: GetSportEventsUserParticipatedInUseCase = get(),
+    addRoleToUserUseCase: AddRoleToUserUseCase = get(),
 ) {
     val basePath = "/users"
     crudRoute(
@@ -43,6 +47,24 @@ fun Route.users(
                 call.safeRespond {
                     val sportEvents = getSportEventsUserParticipatedInUseCase(userId = userId)
                     call.respond(HttpStatusCode.OK, sportEvents)
+                }
+            }
+        }
+
+        post("/{userId}/roles") {
+            call.withValidParameter(
+                paramName = "userId",
+                parser = String::toIntOrNull
+            ) { userId ->
+                call.withValidBody<AddRoleToUserRequest> { body ->
+                    call.safeRespond {
+                        val roleId = body.roleId
+                        addRoleToUserUseCase(roleId, userId)
+                        call.respond(
+                            HttpStatusCode.Created,
+                            "Role with id = $roleId added to user with id = $userId."
+                        )
+                    }
                 }
             }
         }
