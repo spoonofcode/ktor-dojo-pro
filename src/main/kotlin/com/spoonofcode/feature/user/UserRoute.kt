@@ -2,8 +2,10 @@ package com.spoonofcode.feature.user
 
 import com.spoonofcode.core.base.ext.safeRespond
 import com.spoonofcode.core.base.ext.withValidParameter
+import com.spoonofcode.core.base.ext.withValidQueryParameter
 import com.spoonofcode.core.base.routes.crudRoute
 import com.spoonofcode.core.data.repository.UserRepository
+import com.spoonofcode.core.domain.GetAllUsersByRoleIdUseCase
 import com.spoonofcode.core.domain.GetSportEventsUserParticipatedInUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,7 +15,8 @@ import org.koin.ktor.ext.get
 
 fun Route.users(
     userRepository: UserRepository = get(),
-    getSportEventsUserParticipatedInUseCase: GetSportEventsUserParticipatedInUseCase = get()
+    getAllUsersByRoleIdUseCase: GetAllUsersByRoleIdUseCase = get(),
+    getSportEventsUserParticipatedInUseCase: GetSportEventsUserParticipatedInUseCase = get(),
 ) {
     val basePath = "/users"
     crudRoute(
@@ -21,6 +24,17 @@ fun Route.users(
         repository = userRepository
     )
     route(basePath) {
+        get("") {
+            call.withValidQueryParameter<Int>(
+                paramName = "roleId",
+            ) { roleId ->
+                call.safeRespond {
+                    val sportEventsByCreatorUserId = getAllUsersByRoleIdUseCase(roleId = roleId)
+                    call.respond(HttpStatusCode.OK, sportEventsByCreatorUserId)
+                }
+            }
+        }
+
         get("/{userId}/sportEvents") {
             call.withValidParameter(
                 paramName = "userId",

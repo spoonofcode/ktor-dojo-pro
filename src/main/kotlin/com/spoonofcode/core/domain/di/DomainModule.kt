@@ -9,6 +9,8 @@ val domainModule = module {
     singleOf(::LoginGoogleUseCase)
     singleOf(::GetProfileUseCase)
     singleOf(::RegisterUseCase)
+    singleOf(::GetAllRolesByUserIdUseCase)
+    singleOf(::GetAllUsersByRoleIdUseCase)
     singleOf(::GetSportEventsUserParticipatedInUseCase)
     singleOf(::GetSportEventsCreatedByUserUseCase)
     singleOf(::AddUserToSportEventUseCase)

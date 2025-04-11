@@ -17,7 +17,7 @@ data class SportEventRequest(
     val cost: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val coachId: Int,
+    val clubId: Int,
     val roomId: Int,
     val typeId: Int,
     val levelId: Int,
@@ -35,7 +35,7 @@ data class SportEventResponse(
     val cost: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val coach: CoachResponse,
+    val club: ClubResponse,
     val room: RoomResponse,
     val type: TypeResponse,
     val level: LevelResponse,
@@ -52,7 +52,7 @@ object SportEvents : IntIdTable() {
     val cost = varchar("cost", 128)
     val startDateTime = datetime("start_date_time").defaultExpression(CurrentDateTime)
     val endDateTime = datetime("end_date_time").defaultExpression(CurrentDateTime)
-    val coachId = reference("coach_id", Coaches)
+    val clubId = reference("club_id", Clubs)
     val roomId = reference("room_id", Rooms)
     val typeId = reference("type_id", Types)
     val levelId = reference("level_id", Levels)

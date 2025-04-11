@@ -23,6 +23,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
             id = row[Users.id].value,
             firstName = row[Users.firstName],
             lastName = row[Users.lastName],
+            nickName = row[Users.nickName],
             email = row[Users.email],
         )
     }
@@ -31,6 +32,13 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         return dbQuery {
             Users.select { Users.email eq email }.map { toResponse(it) }
         }.firstOrNull()
+    }
+
+    suspend fun readAllUserByRoleId(roleId: Int): List<UserResponse> {
+        return dbQuery {
+            (Users innerJoin UserRoles)
+            .select { UserRoles.roleId eq roleId }.map(toResponse)
+        }
     }
 
     suspend fun readPassword(email: String): String {
@@ -50,7 +58,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     suspend fun readSportEventsInWhichUserParticipates(userId: Int): List<SportEventResponse> {
         return dbQuery {
             (SportEvents innerJoin SportEventUsers)
-                .leftJoin(Coaches)
+                .leftJoin(Clubs)
                 .leftJoin(Levels)
                 .leftJoin(Rooms)
                 .leftJoin(Types)
@@ -72,15 +80,16 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                         cost = row[SportEvents.cost],
                         startDateTime = row[SportEvents.startDateTime],
                         endDateTime = row[SportEvents.endDateTime],
-                        coach = CoachResponse(row[Coaches.id].value, row[Coaches.firstName], row[Coaches.lastName]),
+                        club = ClubResponse(row[Clubs.id].value, row[Clubs.name], row[Clubs.location]),
                         room = RoomResponse(row[Rooms.id].value, row[Rooms.name]),
                         type = TypeResponse(row[Types.id].value, row[Types.name]),
                         level = LevelResponse(row[Levels.id].value, row[Levels.name]),
                         creatorUser = UserResponse(
-                            row[Users.id].value,
-                            row[Users.firstName],
-                            row[Users.lastName],
-                            row[Users.email]
+                            id = row[Users.id].value,
+                            firstName = row[Users.firstName],
+                            lastName = row[Users.lastName],
+                            nickName = row[Users.nickName],
+                            email = row[Users.email],
                         ),
                     )
                 }

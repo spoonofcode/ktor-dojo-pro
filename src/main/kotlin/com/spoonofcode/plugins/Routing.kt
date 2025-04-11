@@ -7,10 +7,7 @@ import com.spoonofcode.feature.login.register.register
 import com.spoonofcode.feature.profile.profile
 import com.spoonofcode.feature.sportevent.sportEvents
 import com.spoonofcode.feature.user.users
-import com.spoonofcode.routes.coaches
-import com.spoonofcode.routes.levels
-import com.spoonofcode.routes.rooms
-import com.spoonofcode.routes.types
+import com.spoonofcode.routes.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
@@ -24,7 +21,8 @@ fun Application.configureRouting() {
         refresh()
         authenticate("auth-jwt") {
             users()
-            coaches()
+            roles()
+            clubs()
             rooms()
             levels()
             types()
