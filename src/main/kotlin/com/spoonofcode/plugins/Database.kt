@@ -13,6 +13,9 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 fun Application.configureDatabases() {
     val driverClass = environment.config.property("storage.driverClassName").getString()
@@ -239,6 +242,10 @@ private fun setExampleData() {
     }
 
     Levels.insert {
+        it[name] = "Beginner"
+    }
+
+    Levels.insert {
         it[name] = "Basic"
     }
 
@@ -302,50 +309,7 @@ private fun setExampleData() {
         it[name] = "Grupa Zaawansowana"
     }
 
-    SportEvents.insert {
-        it[title] = "Sport Event 1"
-        it[description] = "Sport Event 1"
-        it[minNumberOfPeople] = 4
-        it[maxNumberOfPeople] = 10
-        it[cost] = "100 zl"
-        it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[clubId] = 1
-        it[roomId] = 1
-        it[typeId] = 1
-        it[levelId] = 1
-        it[creatorUserId] = 1
-    }
-
-    SportEvents.insert {
-        it[title] = "Sport Event 2"
-        it[description] = "Sport Event 2"
-        it[minNumberOfPeople] = 2
-        it[maxNumberOfPeople] = 6
-        it[cost] = "200 zl"
-        it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[clubId] = 2
-        it[roomId] = 2
-        it[typeId] = 2
-        it[levelId] = 2
-        it[creatorUserId] = 1
-    }
-
-    SportEvents.insert {
-        it[title] = "Sport Event 3"
-        it[description] = "Sport Event 3"
-        it[minNumberOfPeople] = 4
-        it[maxNumberOfPeople] = 8
-        it[cost] = "300 zl"
-        it[startDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[endDateTime] = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        it[clubId] = 3
-        it[roomId] = 3
-        it[typeId] = 3
-        it[levelId] = 3
-        it[creatorUserId] = 3
-    }
+    seedSportEvents()
 
     SportEventUsers.insert {
         it[sportEventId] = 1
@@ -355,6 +319,31 @@ private fun setExampleData() {
     SportEventUsers.insert {
         it[sportEventId] = 2
         it[userId] = 1
+    }
+}
+
+fun seedSportEvents() {
+    val now = Clock.System.now()
+
+    repeat(200) { index ->
+        val startInstant = now + (1..30).random().days + (1..24).random().hours
+        val durationMin = (30..120).random()
+        val endInstant = startInstant + durationMin.minutes
+
+        SportEvents.insert {
+            it[title] = "Trening #${index + 1}"
+            it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
+            it[minNumberOfPeople] = 4
+            it[maxNumberOfPeople] = 18
+            it[cost] = "100 zł"
+            it[startDateTime] = startInstant.toLocalDateTime(TimeZone.UTC)
+            it[endDateTime] = endInstant.toLocalDateTime(TimeZone.UTC)
+            it[clubId] = (1..3).random()
+            it[roomId] = (1..3).random()
+            it[typeId] = (1..10).random()
+            it[levelId] = (1..4).random()
+            it[creatorUserId] = (1..12).random()
+        }
     }
 }
 
