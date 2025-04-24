@@ -14,7 +14,7 @@ data class SportEventRequest(
     val description: String,
     val minNumberOfPeople: Int,
     val maxNumberOfPeople: Int,
-    val cost: String,
+    val cost: Int,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
     val clubId: Int,
@@ -32,7 +32,7 @@ data class SportEventResponse(
     val description: String,
     val minNumberOfPeople: Int,
     val maxNumberOfPeople: Int,
-    val cost: String,
+    val cost: Int,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
     val club: ClubResponse,
@@ -49,7 +49,7 @@ object SportEvents : IntIdTable() {
     val updateDate = datetime("update_date").defaultExpression(CurrentDateTime)
     val minNumberOfPeople = integer("min_number_of_people")
     val maxNumberOfPeople = integer("max_number_of_people")
-    val cost = varchar("cost", 128)
+    val cost = integer("cost")
     val startDateTime = datetime("start_date_time").defaultExpression(CurrentDateTime)
     val endDateTime = datetime("end_date_time").defaultExpression(CurrentDateTime)
     val clubId = reference("club_id", Clubs)

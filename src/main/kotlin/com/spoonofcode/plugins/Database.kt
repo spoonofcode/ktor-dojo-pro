@@ -335,7 +335,7 @@ fun seedSportEvents() {
             it[description] = "Przykładowy opis wydarzenia nr ${index + 1}"
             it[minNumberOfPeople] = 4
             it[maxNumberOfPeople] = 18
-            it[cost] = "100 zł"
+            it[cost] = (4..12).random() * 25
             it[startDateTime] = startInstant.toLocalDateTime(TimeZone.UTC)
             it[endDateTime] = endInstant.toLocalDateTime(TimeZone.UTC)
             it[clubId] = (1..3).random()
