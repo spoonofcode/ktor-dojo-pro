@@ -5,7 +5,7 @@ ktor   = "3.1.2"
 
 # Other versions (fill these in with your actual versions)
 logback = "1.5.18"
-exposed = "0.48.0"
+exposed = "0.53.0"
 mysql = "8.0.33"
 koin = "4.1.0-Beta7"
 hikaricp = "6.3.0"
