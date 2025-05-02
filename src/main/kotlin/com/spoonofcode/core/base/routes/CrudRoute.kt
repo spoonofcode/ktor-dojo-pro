@@ -4,7 +4,6 @@ import com.spoonofcode.core.base.ext.safeRespond
 import com.spoonofcode.core.base.ext.withValidParameter
 import com.spoonofcode.core.base.repository.CrudRepository
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -29,6 +28,10 @@ internal inline fun <reified RQ : Any, reified RS : Any> Route.crudRoute(
             ) { itemId ->
                 call.safeRespond {
                     val item = repository.read(itemId)
+
+                    // TODO SPRWDZ CZEMU TEN ITEM nie dziala
+
+                    println("item = $item")
                     if (item != null) {
                         call.respond(HttpStatusCode.OK, item)
                     } else {

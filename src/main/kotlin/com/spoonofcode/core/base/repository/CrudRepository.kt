@@ -16,7 +16,7 @@ interface CrudRepository<RQ, RS> {
 abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     private val table: T,
     private val leftJoinTables: List<IntIdTable> = emptyList(),
-    private val toResultRow: (RQ) -> Map<Column<*>, Any?>,
+    private val toResultRow: (RQ) -> Map<Column<out Any?>, Any?>,
     val toResponse: (ResultRow) -> RS
 ) : CrudRepository<RQ, RS> {
 
@@ -28,26 +28,26 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
         }.value
 
         if (leftJoinTables.isNotEmpty()) {
-            createQueryWithJoinLeftTables().select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+            createQueryWithJoinLeftTables().select { table.id eq id }
                 .single().let { toResponse(it) }
         } else {
-            table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+            table.select { table.id eq id }
                 .single().let { toResponse(it) }
         }
     }
 
     override suspend fun read(id: Int): RS? = dbQuery {
         if (leftJoinTables.isNotEmpty()) {
-            createQueryWithJoinLeftTables().select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+            createQueryWithJoinLeftTables().select { table.id eq id }
                 .singleOrNull()?.let { toResponse(it) }
         } else {
-            table.select { (table.primaryKey!!.columns[0] as Column<Int>) eq id }
+            table.selectAll().where { table.id eq id }
                 .singleOrNull()?.let { toResponse(it) }
         }
     }
 
     override suspend fun update(id: Int, request: RQ): Boolean = dbQuery {
-        table.update({ (table.primaryKey!!.columns[0] as Column<Int>) eq id }) { statement ->
+        table.update({ table.id eq id }) { statement ->
             toResultRow(request).forEach { (column, value) ->
                 statement[column as Column<Any?>] = value
             }
@@ -55,7 +55,7 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
     }
 
     override suspend fun delete(id: Int): Boolean = dbQuery {
-        table.deleteWhere { (table.primaryKey!!.columns[0] as Column<Int>) eq id } > 0
+        table.deleteWhere { table.id eq id } > 0
     }
 
     override suspend fun readAll(): List<RS> = dbQuery {

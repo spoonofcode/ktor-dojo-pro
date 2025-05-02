@@ -3,6 +3,7 @@ package com.spoonofcode.core.data.repository
 import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
 import com.spoonofcode.plugins.dbQuery
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.select
 
 class SportEventRepository : GenericCrudRepository<SportEvents, SportEventRequest, SportEventResponse>(
@@ -17,11 +18,11 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
             SportEvents.cost to request.cost,
             SportEvents.startDateTime to request.startDateTime,
             SportEvents.endDateTime to request.endDateTime,
-            SportEvents.clubId to request.clubId,
-            SportEvents.roomId to request.roomId,
-            SportEvents.typeId to request.typeId,
-            SportEvents.levelId to request.levelId,
-            SportEvents.creatorUserId to request.creatorUserId,
+            SportEvents.clubId to EntityID(request.clubId, Clubs),
+            SportEvents.roomId to EntityID(request.roomId, Rooms),
+            SportEvents.typeId to EntityID(request.typeId, Types),
+            SportEvents.levelId to EntityID(request.levelId, Levels),
+            SportEvents.creatorUserId to EntityID(request.creatorUserId, Users),
         )
     },
     toResponse = { row ->
