@@ -4,7 +4,7 @@ import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
 import com.spoonofcode.plugins.dbQuery
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 class SportEventRepository : GenericCrudRepository<SportEvents, SportEventRequest, SportEventResponse>(
     table = SportEvents,
@@ -59,7 +59,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
                 .leftJoin(Rooms)
                 .leftJoin(Types)
                 .leftJoin(Users)
-                .select { SportEvents.creatorUserId eq creatorUserId }.map {
+                .selectAll().where { SportEvents.creatorUserId eq creatorUserId }.map {
                     toResponse(it)
                 }
         }
@@ -67,7 +67,7 @@ class SportEventRepository : GenericCrudRepository<SportEvents, SportEventReques
 
     suspend fun countByCreatorUserId(userId: Int): Long {
         return dbQuery {
-            SportEvents.select { SportEvents.creatorUserId eq userId }.count()
+            SportEvents.selectAll().where { SportEvents.creatorUserId eq userId }.count()
         }
     }
 }

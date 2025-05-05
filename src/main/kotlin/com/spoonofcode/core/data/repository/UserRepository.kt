@@ -4,7 +4,7 @@ import com.spoonofcode.core.base.repository.GenericCrudRepository
 import com.spoonofcode.core.model.*
 import com.spoonofcode.plugins.dbQuery
 import org.jetbrains.exposed.sql.leftJoin
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
     table = Users,
@@ -30,27 +30,27 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
 ) {
     suspend fun readByEmail(email: String): UserResponse? {
         return dbQuery {
-            Users.select { Users.email eq email }.map { toResponse(it) }
+            Users.selectAll().where { Users.email eq email }.map { toResponse(it) }
         }.firstOrNull()
     }
 
     suspend fun readAllUserByRoleId(roleId: Int): List<UserResponse> {
         return dbQuery {
             (Users innerJoin UserRoles)
-            .select { UserRoles.roleId eq roleId }.map(toResponse)
+                .selectAll().where { UserRoles.roleId eq roleId }.map(toResponse)
         }
     }
 
     suspend fun readPassword(email: String): String {
         return dbQuery {
-            Users.select { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD
+            Users.selectAll().where { Users.email eq email }.map { it[Users.password] }.firstOrNull() ?: EMPTY_PASSWORD
         }
     }
 
     suspend fun countSportEventsInWhichTheUserParticipates(userId: Int): Long {
         return dbQuery {
             (SportEvents innerJoin SportEventUsers)
-                .select { SportEventUsers.userId eq userId }
+                .selectAll().where { SportEventUsers.userId eq userId }
                 .count()
         }
     }
@@ -67,7 +67,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
                     onColumn = { SportEvents.creatorUserId },
                     otherColumn = { Users.id }
                 )
-                .select { SportEventUsers.userId eq userId }
+                .selectAll().where { SportEventUsers.userId eq userId }
                 .map { row ->
                     SportEventResponse(
                         id = row[SportEvents.id].value,

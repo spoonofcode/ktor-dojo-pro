@@ -28,17 +28,17 @@ abstract class GenericCrudRepository<T : IntIdTable, RQ, RS>(
         }.value
 
         if (leftJoinTables.isNotEmpty()) {
-            createQueryWithJoinLeftTables().select { table.id eq id }
+            createQueryWithJoinLeftTables().selectAll().where { table.id eq id }
                 .single().let { toResponse(it) }
         } else {
-            table.select { table.id eq id }
+            table.selectAll().where { table.id eq id }
                 .single().let { toResponse(it) }
         }
     }
 
     override suspend fun read(id: Int): RS? = dbQuery {
         if (leftJoinTables.isNotEmpty()) {
-            createQueryWithJoinLeftTables().select { table.id eq id }
+            createQueryWithJoinLeftTables().selectAll().where { table.id eq id }
                 .singleOrNull()?.let { toResponse(it) }
         } else {
             table.selectAll().where { table.id eq id }
