@@ -1,16 +1,16 @@
 [versions]
 # Kotlin and Ktor versions
-kotlin = "2.1.10"
-ktor   = "2.3.12"
+kotlin = "2.1.21-RC"
+ktor   = "3.1.2"
 
 # Other versions (fill these in with your actual versions)
-logback = "1.4.14"
-exposed = "0.48.0"
+logback = "1.5.18"
+exposed = "0.60.0"
 mysql = "8.0.33"
-koin = "3.4.1"
-hikaricp = "5.0.1"
-googleAuth = "2.3.0"
-javajwt = "4.4.0"
+koin = "4.1.0-Beta7"
+hikaricp = "6.3.0"
+googleAuth = "2.7.2"
+javajwt = "4.5.0"
 jbcrypt = "0.4"
 
 [libraries]
@@ -47,7 +47,7 @@ exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time
 mysql-connector-java = { group = "mysql", name = "mysql-connector-java", version.ref = "mysql" }
 
 # Koin + Hikari + Google
-koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin" }
+koin-ktor = { group = "io.insert-koin", name = "koin-ktor3", version.ref = "koin" }
 hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikaricp" }
 google-api-client = { group = "com.google.api-client", name = "google-api-client", version.ref = "googleAuth" }
 

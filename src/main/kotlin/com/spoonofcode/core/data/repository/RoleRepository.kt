@@ -6,7 +6,7 @@ import com.spoonofcode.core.model.RoleResponse
 import com.spoonofcode.core.model.Roles
 import com.spoonofcode.core.model.UserRoles
 import com.spoonofcode.plugins.dbQuery
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 class RoleRepository : GenericCrudRepository<Roles, RoleRequest, RoleResponse>(
     table = Roles,
@@ -26,7 +26,7 @@ class RoleRepository : GenericCrudRepository<Roles, RoleRequest, RoleResponse>(
     suspend fun readAllRolesByUserId(userId: Int): List<RoleResponse> {
         return dbQuery {
             (Roles innerJoin UserRoles)
-                .select { UserRoles.userId eq userId }.map(toResponse)
+                .selectAll().where { UserRoles.userId eq userId }.map(toResponse)
         }
     }
 }
