@@ -2,13 +2,15 @@ package com.spoonofcode.core.model
 
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 data class SendMessageDto(
     val to: String?,
     val notification: NotificationBody,
 )
 
+@Serializable
 data class NotificationBody(
     val title: String,
     val body: String,

@@ -1,6 +1,6 @@
 [versions]
 # Kotlin and Ktor versions
-kotlin = "2.1.21-RC"
+kotlin = "2.2.0-RC2"
 ktor   = "3.1.2"
 
 # Other versions (fill these in with your actual versions)

@@ -18,7 +18,7 @@ fun Application.module() {
     configureAuthenticationJWT()
     configureRouting()
 
-    val serviceAccountStream = this::class.java.classLoader.getResourceAsStream("service.account.key.json")
+    val serviceAccountStream = this::class.java.classLoader.getResourceAsStream("service_account_key.json")
     val options = FirebaseOptions
         .builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
