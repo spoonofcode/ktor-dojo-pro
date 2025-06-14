@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SendMessageDto(
-    val to: String?,
+    val to: String? = null,
     val notification: NotificationBody,
 )
 
