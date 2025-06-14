@@ -54,6 +54,9 @@ dependencies {
     implementation(libs.hikaricp)
     implementation(libs.google.api.client)
 
+    // Firebase
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
     // Testing
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
