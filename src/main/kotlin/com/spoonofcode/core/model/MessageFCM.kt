@@ -5,18 +5,18 @@ import com.google.firebase.messaging.Notification
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SendMessageDto(
+data class MessageFCM(
     val to: String? = null,
-    val notification: NotificationBody,
+    val notification: NotificationFCM,
 )
 
 @Serializable
-data class NotificationBody(
+data class NotificationFCM(
     val title: String,
     val body: String,
 )
 
-fun SendMessageDto.toMessage(): Message {
+fun MessageFCM.toMessage(): Message {
     return Message.builder()
         .setNotification(
             Notification.builder()
