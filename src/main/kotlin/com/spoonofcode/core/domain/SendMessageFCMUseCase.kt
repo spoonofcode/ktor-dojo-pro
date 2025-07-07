@@ -10,6 +10,12 @@ class SendMessageFCMUseCase() {
     operator fun invoke(messageFCM: MessageFCM) {
 //        FirebaseMessaging.getInstance().send(messageFCM.toMessage())
 //        FirebaseMessaging.getInstance().sendEachForMulticast(messageFCM.toMessageMulti())
+
+        val dataPayload = mapOf(
+            "screen" to "detail",
+            "item_id" to "123"
+        )
+
         if (messageFCM.topics.isNullOrEmpty().not()) {
             messageFCM.topics.forEach { topic ->
                 FirebaseMessaging.getInstance().send(
@@ -18,8 +24,11 @@ class SendMessageFCMUseCase() {
                             Notification.builder()
                                 .setTitle(messageFCM.notification.title)
                                 .setBody(messageFCM.notification.body)
+                                .setImage("https://i.seadn.io/s/raw/files/ec3d7f1edc5e5b3699b8d5c1d1e0623a.png")
                                 .build()
-                        ).setTopic(topic).build()
+                        ).setTopic(topic)
+                        .putAllData(dataPayload)
+                        .build()
                 )
             }
 //                FirebaseMessaging.getInstance().send(
