@@ -4,7 +4,7 @@ import com.spoonofcode.feature.login.login.login
 import com.spoonofcode.feature.login.login.loginGoogle
 import com.spoonofcode.feature.login.refresh.refresh
 import com.spoonofcode.feature.login.register.register
-import com.spoonofcode.feature.messagefcm.sendMessageFCM
+import com.spoonofcode.feature.messagefcm.messageFCM
 import com.spoonofcode.feature.profile.profile
 import com.spoonofcode.feature.sportevent.sportEvents
 import com.spoonofcode.feature.user.users
@@ -20,7 +20,7 @@ fun Application.configureRouting() {
         login()
         register()
         refresh()
-        sendMessageFCM()
+        messageFCM()
         authenticate("auth-jwt") {
             users()
             roles()

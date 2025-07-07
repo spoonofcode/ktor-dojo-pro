@@ -9,9 +9,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.get
 
-fun Route.sendMessageFCM(sendMessageFCMUseCase: SendMessageFCMUseCase = get()) {
-    route("/send") {
-        post {
+fun Route.messageFCM(sendMessageFCMUseCase: SendMessageFCMUseCase = get()) {
+    route("/messageFCM") {
+        post("/send") {
             call.withValidBody<MessageFCM> { body ->
                 call.safeRespond {
                     sendMessageFCMUseCase(body)
