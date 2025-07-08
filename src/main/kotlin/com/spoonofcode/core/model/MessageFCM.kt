@@ -4,8 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MessageFCM(
-    val token: String? = null,
+    val tokens: List<String>? = null,
     val topics: List<String>? = null,
+    val data: Map<String, String>? = null,
     val notification: NotificationFCM,
 )
 
@@ -13,22 +14,5 @@ data class MessageFCM(
 data class NotificationFCM(
     val title: String,
     val body: String,
+    val imageUrl: String? = null,
 )
-
-//fun MessageFCM.toMessage(): Message {
-//    return Message.builder()
-//        .setNotification(
-//            Notification.builder()
-//                .setTitle(notification.title)
-//                .setBody(notification.body)
-//                .build()
-//        )
-//        .apply {
-//            if (to == null) {
-//                setTopic("chat")
-//            } else {
-//                setToken(to)
-//            }
-//        }
-//        .build()
-//}
