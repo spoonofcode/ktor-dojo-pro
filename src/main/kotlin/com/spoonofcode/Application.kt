@@ -14,4 +14,5 @@ fun Application.module() {
 //    configureOAuthGoogleWebClient()
     configureAuthenticationJWT()
     configureRouting()
+    configureFirebase()
 }

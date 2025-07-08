@@ -1,18 +1,19 @@
 package com.spoonofcode.core.domain.di
 
 import com.spoonofcode.core.domain.*
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val domainModule = module {
-    singleOf(::LoginUseCase)
-    singleOf(::LoginGoogleUseCase)
-    singleOf(::GetProfileUseCase)
-    singleOf(::RegisterUseCase)
-    singleOf(::GetAllRolesByUserIdUseCase)
-    singleOf(::GetAllUsersByRoleIdUseCase)
-    singleOf(::GetSportEventsUserParticipatedInUseCase)
-    singleOf(::GetSportEventsCreatedByUserUseCase)
-    singleOf(::AddUserToSportEventUseCase)
-    singleOf(::AddRoleToUserUseCase)
+    factoryOf(::LoginUseCase)
+    factoryOf(::LoginGoogleUseCase)
+    factoryOf(::GetProfileUseCase)
+    factoryOf(::RegisterUseCase)
+    factoryOf(::GetAllRolesByUserIdUseCase)
+    factoryOf(::GetAllUsersByRoleIdUseCase)
+    factoryOf(::GetSportEventsUserParticipatedInUseCase)
+    factoryOf(::GetSportEventsCreatedByUserUseCase)
+    factoryOf(::AddUserToSportEventUseCase)
+    factoryOf(::AddRoleToUserUseCase)
+    factoryOf(::SendMessageFCMUseCase)
 }
