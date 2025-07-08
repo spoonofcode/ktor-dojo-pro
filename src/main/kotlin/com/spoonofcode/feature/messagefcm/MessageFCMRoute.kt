@@ -20,15 +20,4 @@ fun Route.messageFCM(sendMessageFCMUseCase: SendMessageFCMUseCase = get()) {
             }
         }
     }
-
-    route("/broadcast") {
-        post {
-            call.withValidBody<MessageFCM> { body ->
-                call.safeRespond {
-                    sendMessageFCMUseCase(body)
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
-        }
-    }
 }
