@@ -12,6 +12,7 @@ class UserRepository : GenericCrudRepository<Users, UserRequest, UserResponse>(
         mapOf(
             Users.firstName to request.firstName,
             Users.lastName to request.lastName,
+            Users.nickName to request.nickName,
             Users.email to request.email,
             Users.password to request.password,
             Users.provider to request.provider,
