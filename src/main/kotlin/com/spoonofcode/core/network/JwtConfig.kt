@@ -1,12 +1,10 @@
-package com.spoonofcode.core.utils
+package com.spoonofcode.core.network
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.server.auth.jwt.JWTAuthenticationProvider
-import io.ktor.server.auth.jwt.JWTCredential
-import io.ktor.server.auth.jwt.JWTPrincipal
-import java.util.Date
+import io.ktor.server.auth.jwt.*
+import java.util.*
 
 object JwtConfig {
     const val CLAIM_EMAIL = "email"

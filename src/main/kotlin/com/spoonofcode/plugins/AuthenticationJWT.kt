@@ -1,6 +1,6 @@
 package com.spoonofcode.plugins
 
-import com.spoonofcode.core.utils.JwtConfig
+import com.spoonofcode.core.network.JwtConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*

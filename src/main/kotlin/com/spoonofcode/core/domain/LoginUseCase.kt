@@ -1,9 +1,9 @@
 package com.spoonofcode.core.domain
 
+import com.spoonofcode.core.base.utils.PasswordUtil
 import com.spoonofcode.core.data.repository.UserRepository
 import com.spoonofcode.core.model.LoginResponse
-import com.spoonofcode.core.utils.JwtConfig
-import com.spoonofcode.core.utils.PasswordUtil
+import com.spoonofcode.core.network.JwtConfig
 import com.spoonofcode.feature.login.login.LoginResult
 
 class LoginUseCase(
