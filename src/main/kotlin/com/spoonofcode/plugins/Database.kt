@@ -75,6 +75,20 @@ private fun setExampleData() {
 
     Users.insert {
         it[firstName] = "Bartosz"
+        it[lastName] = "Łuczak"
+        it[nickName] = "Lycha"
+        it[email] = "luczak.bartosz5@gmail.com"
+        it[provider] = "google"
+        it[providerId] = "117628026316806676295"
+    }
+
+    UserRoles.insert {
+        it[userId] = 1
+        it[roleId] = 1
+    }
+
+    Users.insert {
+        it[firstName] = "Bartosz"
         it[lastName] = "Luczak"
         it[nickName] = "Lycha"
         it[email] = "bartosz.luczak@gmail.com"
@@ -82,7 +96,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 1
+        it[userId] = 2
         it[roleId] = 1
     }
 
@@ -94,7 +108,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 2
+        it[userId] = 3
         it[roleId] = 2
     }
 
@@ -107,7 +121,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 3
+        it[userId] = 4
         it[roleId] = 3
     }
 
@@ -120,7 +134,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 4
+        it[userId] = 5
         it[roleId] = 3
     }
 
@@ -132,7 +146,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 5
+        it[userId] = 6
         it[roleId] = 3
     }
 
@@ -144,7 +158,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 6
+        it[userId] = 7
         it[roleId] = 3
     }
 
@@ -157,7 +171,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 7
+        it[userId] = 8
         it[roleId] = 3
     }
 
@@ -170,7 +184,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 8
+        it[userId] = 9
         it[roleId] = 3
     }
 
@@ -183,7 +197,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 9
+        it[userId] = 10
         it[roleId] = 3
     }
 
@@ -196,7 +210,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 10
+        it[userId] = 11
         it[roleId] = 4
     }
 
@@ -209,7 +223,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 11
+        it[userId] = 12
         it[roleId] = 4
     }
 
@@ -222,7 +236,7 @@ private fun setExampleData() {
     }
 
     UserRoles.insert {
-        it[userId] = 12
+        it[userId] = 13
         it[roleId] = 4
     }
 
