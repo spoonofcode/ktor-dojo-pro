@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.google.api.client)
 
     // Firebase
-    implementation("com.google.firebase:firebase-admin:9.2.0")
+    implementation(libs.firebase.admin)
 
     // Testing
     testImplementation(libs.ktor.server.test.host)

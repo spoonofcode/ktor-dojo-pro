@@ -1,17 +1,19 @@
 [versions]
 # Kotlin and Ktor versions
-kotlin = "2.2.0-RC2"
-ktor   = "3.1.2"
+kotlin = "2.2.0"
+ktor   = "3.2.2"
 
 # Other versions (fill these in with your actual versions)
-logback = "1.5.18"
-exposed = "0.60.0"
-mysql = "8.0.33"
-koin = "4.1.0-Beta7"
-hikaricp = "6.3.0"
-googleAuth = "2.7.2"
+exposed = "0.61.0"
+firebase-admin = "9.2.0"
+googleAuth = "2.8.0"
+hikaricp = "6.3.1"
 javajwt = "4.5.0"
 jbcrypt = "0.4"
+koin = "4.1.0-Beta8"
+logback = "1.5.18"
+mysql = "8.0.33"
+
 
 [libraries]
 # Ktor clients
@@ -54,6 +56,9 @@ google-api-client = { group = "com.google.api-client", name = "google-api-client
 # Test libraries
 ktor-server-test-host = { group = "io.ktor", name = "ktor-server-test-host-jvm", version.ref = "ktor" }
 kotlin-test-junit = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
+
+# Firebase
+firebase-admin = { group = "com.google.firebase", name = "firebase-admin", version.ref = "firebase-admin" }
 
 [plugins]
 # If you want to manage plugin versions also (e.g., Kotlin plugin, Ktor plugin, etc.)
