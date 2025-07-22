@@ -1,4 +1,4 @@
-rootProject.name = "com.spoonofcode.ktor-dojo-pro"
+rootProject.name = "com.spoonofcode.dojopro.ktor-dojo-pro"
 
 dependencyResolutionManagement {
     versionCatalogs {
